@@ -9,7 +9,7 @@
 use think\facade\Env;
 
 return [
-    'AppID'        => ENV::get('AppID'),
-    'AppSecret'        => ENV::get('AppSecret'),
-    'CallBack'        => ENV::get('CallBack'),
+    'AppID'        => ENV::get('YB_AppID'),
+    'AppSecret'        => ENV::get('YB_AppSecret'),
+    'CallBack'        => ENV::get('YB_CallBack'),
 ];
