@@ -30,4 +30,8 @@ class IndexController
     {
         return 'hello,' . $name;
     }
+
+    public function index2(){
+        return 'index2';
+    }
 }
