@@ -3,6 +3,7 @@ namespace yb\YBAPI;
 use yb\YBException;
 use yb\YBLANG;
 use yb\YBOpenApi;
+use yb\YBUnPermissiveException;
 
 /**
  * @package YBAPI
@@ -57,13 +58,14 @@ class YBAPI_IApp {
         if (!is_array($decInfo) || !isset($decInfo['visit_oauth'])) {
             throw new YBException(YBLANG::E_DEC_RESULT);
         }
-        if (!$decInfo['visit_oauth']) {//未授权跳转
-            throw new YBException('未授权跳转');
-            header('location: '.$this->forwardurl());
-            return false;
+
+        if (!$decInfo['visit_oauth']) {
+            throw new YBUnPermissiveException('用户未授权，重定向到用户授权地址');
         }
         return $decInfo;
     }
+
+
 
     //解密授权信息
     public function decrypts($code){
@@ -86,7 +88,7 @@ class YBAPI_IApp {
      *
      * @return	String 授权认证页面地址
 	 */
-    private function forwardurl() {
+    public function forwardurl() {
         assert(!empty($this->appid),   YBLANG::E_NO_APPID);
         assert(!empty($this->backurl), YBLANG::E_NO_CALLBACKURL);
         

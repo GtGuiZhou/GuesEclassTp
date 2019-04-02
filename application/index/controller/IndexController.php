@@ -5,6 +5,7 @@ namespace app\index\controller;
 use think\facade\Log;
 use think\facade\Session;
 use yb\YBOpenApi;
+use yb\YBUnPermissiveException;
 
 class IndexController
 {
@@ -16,9 +17,11 @@ class IndexController
         $iapp  = $api->getIApp();
 
         //轻应用获取access_token，未授权则跳转至授权页面
-        $info = $iapp->perform();
-
-        Log::info($info);
+        try{
+            $info = $iapp->perform();
+        } catch (YBUnPermissiveException $e){
+            return redirect($iapp->forwardurl());
+        }
 
         $token = $info['visit_oauth']['access_token'];//轻应用获取的token
 
