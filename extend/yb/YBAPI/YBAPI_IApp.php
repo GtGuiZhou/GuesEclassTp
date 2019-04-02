@@ -42,6 +42,9 @@ class YBAPI_IApp {
      * @return Array 授权信息数据
      */
     public function perform() {
+        if (!isset($_GET['verify_request']))
+            throw new YBException('易班授权代码不存在');
+
         $code = $_GET['verify_request'];
         
         if (!isset($code) || empty($code)) {
