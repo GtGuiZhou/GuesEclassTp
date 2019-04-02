@@ -58,6 +58,7 @@ class YBAPI_IApp {
             throw new YBException(YBLANG::E_DEC_RESULT);
         }
         if (!$decInfo['visit_oauth']) {//未授权跳转
+            throw new YBException('未授权跳转');
             header('location: '.$this->forwardurl());
             return false;
         }
