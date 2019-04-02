@@ -20,6 +20,7 @@ class IndexController
         try{
             $info = $iapp->perform();
         } catch (YBUnPermissiveException $e){
+            Log::info('重定向至：'.$iapp->forwardurl());
             return redirect($iapp->forwardurl());
         }
 
