@@ -41,7 +41,7 @@ class Handle extends HandleBase
         }
 
         if ($e instanceof UnLoginException){
-            return result(null, $e->getMessage(),401);
+            return result(null, '未登录，不允许操作',401);
         }
 
         // 其他错误交给系统处理

@@ -66,16 +66,11 @@ function group_router_set($rule){
  * 获取当前会话用户，不存在抛异常
  */
 function user(){
-    if (config('app_debug')){
-        $user = \app\common\model\UserModel::get(1);
-        \think\facade\Session::set('user',$user);
-    }
 
-    $user = \think\facade\Session::get('user');
-
+    $user = \think\facade\Session::get('sys:user');
 
     if (!$user){
-        abort(403,'登录已过期');
+        throw new \app\common\exception\UnLoginException();
     }
     return $user;
 }
