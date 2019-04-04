@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 
+use app\common\model\UserModel;
 use think\facade\Log;
 use think\facade\Session;
 use yb\YBOpenApi;
@@ -27,16 +28,14 @@ class IndexController
 
         Session::set('yb:token',$token);
 
-        var_dump($info);
-        return $token;
-    }
+        // 获取用户信息
+        $user = UserModel::where('userid' , ['visit_user']['userid'])->find();
+        if (!$user){
+            $user = UserModel::create($info['visit_user']);
+            $user = $user->findOrFail($user['id']); // 防止字段缺失
+        }
 
-    public function hello($name = 'ThinkPHP5')
-    {
-        return 'hello,' . $name;
-    }
-
-    public function index2(){
-        return 'index2';
+        Session::set('sys:user',$user);
+        return success($user);
     }
 }
