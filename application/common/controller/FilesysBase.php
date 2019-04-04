@@ -39,18 +39,12 @@ class FilesysBase extends Controller
         $this->model = new FileSysModel();
     }
 
-    public function index(){
-        switch (input('action')){
-            case 'config':
-                return $this->config();
-        }
-    }
-
 
 
     public function read(){
         $file = $this->model
                 ->where('filename',input('filename'))
+                ->cache(true) // 永久缓存
                 ->findOrFail();
 
         if ($file['device'] == 'local'){

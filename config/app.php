@@ -19,9 +19,9 @@ return [
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
-    'app_debug'              => Env::get('APP_DEBUG'),
+    'app_debug'              => Env::get('APP_DEBUG',true),
     // 应用Trace
-    'app_trace'              => Env::get('APP_TRACE'),
+    'app_trace'              => Env::get('APP_TRACE',false),
     // 是否支持多模块
     'app_multi_module'       => true,
     // 入口自动绑定模块

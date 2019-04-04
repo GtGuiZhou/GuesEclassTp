@@ -26,6 +26,8 @@ class IndexController
         $token = $info['visit_oauth']['access_token'];//轻应用获取的token
 
         Session::set('yb:token',$token);
+
+        var_dump($info);
         return $token;
     }
 

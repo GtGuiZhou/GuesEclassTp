@@ -40,6 +40,10 @@ class Handle extends HandleBase
             return error($e->getMessage());
         }
 
+        if ($e instanceof UnLoginException){
+            return result(null, $e->getMessage(),401);
+        }
+
         // 其他错误交给系统处理
         return parent::render($e);
     }

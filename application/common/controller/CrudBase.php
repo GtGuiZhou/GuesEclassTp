@@ -80,13 +80,18 @@ class CrudBase extends Controller
             $except = explode(',',$this->limitAction['except']);
         }
 
+
+
         if (!$isOnly && !$isExcept)
             $only = $this->limitAction;
 
         $only = array_map('strtolower',$only);
         $except = array_map('strtolower',$except);
+        if (in_array($action,$only)){
+            throw new ValidateException('您无权访问该方法');
+        }
 
-        if (in_array($action,$only) && !in_array($action, $except)){
+        if (count($except) > 0 && !in_array($action, $except)){
             throw new ValidateException('您无权访问该方法');
         }
     }

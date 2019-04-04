@@ -14,6 +14,7 @@ use think\console\Input;
 use think\console\input\Argument;
 use think\console\input\Option;
 use think\console\Output;
+use think\Exception;
 
 class Crud extends Command
 {
@@ -30,9 +31,15 @@ class Crud extends Command
     {
         $name = ucfirst(strtolower(trim($input->getArgument('name'))));
         $delete = $input->getOption('delete');
+        $softdelete = $input->getOption('softdelete');
         $table = strtolower($name);
-        $out_admin_path = "./application/api/controller/".ucfirst(strtolower($name))."Controller.php";
-        $out_api_path = "./application/admin/controller/".ucfirst(strtolower($name))."Controller.php";
+
+        if (!$name){
+            throw new Exception('name不能为空');
+        }
+
+        $out_admin_path = "./application/admin/controller/".ucfirst(strtolower($name))."Controller.php";
+        $out_api_path = "./application/api/controller/".ucfirst(strtolower($name))."Controller.php";
         $out_model_path = "./application/common/model/".ucfirst(strtolower($name))."Model.php";
 
         if ($delete){
@@ -43,14 +50,20 @@ class Crud extends Command
             return;
         }
 
+
         $tpl_admin_controller = file_get_contents('./application/command/template/AdminController.tpl');
         $tpl_api_controller = file_get_contents('./application/command/template/ApiController.tpl');
         $tpl_model = file_get_contents('./application/command/template/Model.tpl');
-        $append = var_export([
+        if ($softdelete)
+            $tpl_model = file_get_contents('./application/command/template/SoftDeleteModel.tpl');
+        $append = [
             'create_time_text',
             'update_time_text',
-            'delete_time_text'
-        ],true);
+        ];
+        if ($softdelete){
+            array_push($append,'delete_time_text');
+        }
+        $append = var_export($append,true);
         $display_admin_controller = $this->view($tpl_admin_controller,array('name' => $name));
         $display_api_controller = $this->view($tpl_api_controller,['name' => $name]);
         $display_model = $this->view($tpl_model,['name' => $name,'table' => $table,'append' => $append .';']);
