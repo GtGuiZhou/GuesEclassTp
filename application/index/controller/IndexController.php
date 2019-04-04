@@ -27,9 +27,9 @@ class IndexController
         $token = $info['visit_oauth']['access_token'];//轻应用获取的token
 
         Session::set('yb:token',$token);
-
+        var_export(['visit_user']['userid']);
         // 获取用户信息
-        $user = UserModel::where('userid' , ['visit_user']['userid'])->find();
+        $user = UserModel::where('userid' , $info['visit_user']['userid'])->find();
         if (!$user){
             $user = UserModel::create($info['visit_user']);
             $user = $user->findOrFail($user['id']); // 防止字段缺失
