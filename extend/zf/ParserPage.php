@@ -9,9 +9,12 @@
 namespace zf;
 
 
+use think\exception\ValidateException;
+
 class ParserPage
 {
     public function viewstate($page){
+        $this->objectMove($page);
         $pattern = <<<p
     /<input type="hidden" name="__VIEWSTATE" value="(.*?)" \/>/
 p;
@@ -30,8 +33,9 @@ p;
      * @return bool
      */
     public function loginState($page){
+        $this->objectMove($page);
         $pattern = <<<__
-/<script language='javascript' defer>alert\('(.*?)'\);document.getElementById\('TextBox2'\).focus\(\);<\/script>/
+/<script language='javascript' defer>alert\('(.*?)'\);/
 __;
         preg_match($pattern,$page,$matchs);
 
@@ -49,6 +53,7 @@ __;
      * @return array
      */
     public function timetable($page){
+        $this->objectMove($page);
         $pattern = <<<p
 /<td align="Center".*?>(.*?)<\/td>/
 p;
@@ -66,27 +71,13 @@ p;
      * @return array
      */
     public function scoreReport($page){
+        $this->objectMove($page);
         $pattern = <<<p
-/ <tr.*?>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                    <\/tr>/
+/<td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td>(.*?)/
 p;
 
         preg_match_all($pattern,$page,$matches);
+
         $res = [];
         // 逆转数组
         for ($i = 1; $i < count($matches[1]) ;++$i){
@@ -96,5 +87,11 @@ p;
         }
 
         return $res;
+    }
+
+    private function objectMove($page){
+        if (strpos($page,"<html><head><title>Object moved</title></head><body>")){
+            throw new ValidateException('ObjectMove');
+        }
     }
 }

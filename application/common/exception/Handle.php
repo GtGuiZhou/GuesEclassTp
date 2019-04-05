@@ -14,6 +14,7 @@ use think\db\exception\ModelNotFoundException;
 use think\exception\Handle as HandleBase;
 use think\exception\HttpException;
 use think\exception\ValidateException;
+use zf\ZFException;
 
 class Handle extends HandleBase
 {
@@ -42,6 +43,10 @@ class Handle extends HandleBase
 
         if ($e instanceof UnLoginException){
             return result(null, '未登录，不允许操作',401);
+        }
+
+        if ($e instanceof ZFException){
+            return warning($e->getMessage());
         }
 
         // 其他错误交给系统处理

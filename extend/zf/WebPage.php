@@ -67,7 +67,7 @@ class WebPage
             'Cookie' => $cookie,
             'Referer' => "$host/xs_main.aspx?xh=$account"
         ];
-        return $this->client->get("xskbcx.aspx?xh=$account&gnmkdm=N121603", ['headers' => $headers])->getBody();
+        return $this->client->get("xscjcx.aspx?xh=$account&gnmkdm=N121603", ['headers' => $headers])->getBody();
     }
 
     /**
@@ -88,22 +88,23 @@ class WebPage
         $host = rtrim($host, '/');
         $headers = [
             'Cookie' => $cookie,
-            'Referer' => "$host/xs_main.aspx?xh=$account",
+            'Referer' => "$host/xscjcx.aspx?xh=$account&gnmkdm=N121605",
             'Origin' => $host
         ];
         $data = [
-            '__EVENTTARGET',
-            '__EVENTARGUMENT',
+            '__EVENTTARGET' => '',
+            '__EVENTARGUMENT' => '',
             '__VIEWSTATE' => $viewstate,
-            'hidLanguage',
-            'ddlXN',
-            'ddlXQ',
-            'ddl_kcxz',
-            'btn_zcj'
+            'hidLanguage' => '',
+            'ddlXN' => '',
+            'ddlXQ' => '',
+            'ddl_kcxz' => '',
+            'btn_zcj' => iconv('utf-8', 'gb2312', '历年成绩')
         ];
-        return $this->client->post("xskbcx.aspx?xh=$account&gnmkdm=N121603", [
-            'form_params' => $data, 'headers' => $headers
-        ])->getBody();
+        $url = "$host/xscjcx.aspx?xh=$account&gnmkdm=N121605";
+        return $this->client->post($url,
+            ['form_params'=>$data,'headers' => $headers])
+            ->getBody();
     }
 
 }

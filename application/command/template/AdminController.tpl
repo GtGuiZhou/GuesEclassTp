@@ -10,12 +10,12 @@ namespace app\admin\controller;
 
 
 use app\common\controller\AdminBase;
-use app\common\model\${name}Model;
+use app\common\model\${uc_name}Model;
 
-class ${name}Controller extends AdminBase
+class ${uc_name}Controller extends AdminBase
 {
     protected function initialize()
     {
-        $this->model = new ${name}Model();
+        $this->model = new ${uc_name}Model();
     }
 }

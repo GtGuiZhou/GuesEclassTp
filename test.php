@@ -5,37 +5,12 @@
  * Date: 19-4-3
  * Time: 上午8:35
  */
-$str = iconv('gb2312','utf-8',file_get_contents('test.html'));
+$str = "<script language='javascript' defer>alert('密码错误！！');document.getElementById('txtUserName').focus();</script>";
 
 $pattern = <<<p
-/ <tr.*?>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                        <td>(.*?)<\/td>
-                                    <\/tr>/
+/<script language='javascript' defer>alert\('(.*?)'\);/
 p;
 
+preg_match($pattern,$str,$mt);
 
-
-preg_match_all($pattern,$str,$matches);
-$res = [];
-
-for ($i = 1; $i < count($matches[1]) ;++$i){
-    for ($j =1; $j < count($matches) - 1; ++$j){
-        $res[$i - 1][$j - 1] =  $matches[$j][$i];
-    }
-}
-
-file_put_contents('res.json',json_encode($matches[1]));
+var_export($mt);

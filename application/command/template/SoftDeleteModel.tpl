@@ -11,9 +11,9 @@ namespace app\common\model;
 
 use think\model\concern\SoftDelete;
 
-class ${name}Model extends BaseModel
+class ${uc_name}Model extends BaseModel
 {
     use SoftDelete;
     protected $table = 'sys_${table}';
-    protected $append = ${append}
+    protected $append = ${append};
 }

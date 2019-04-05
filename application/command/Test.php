@@ -9,9 +9,12 @@
 namespace app\command;
 
 
+use app\api\controller\ZfController;
+use app\common\model\UserModel;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
+use think\facade\Session;
 use zf\Main;
 
 class Test extends Command
@@ -23,9 +26,9 @@ class Test extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $main = new Main();
-        $main->checkCode();
-//        $page = $main->login('35351316237','guotao48','2134');
+        $crud = new Crud();
+//        $crud->parserRouter('sys_repair',true);
+        echo $crud->parserRouter('repair',true);
     }
 
 

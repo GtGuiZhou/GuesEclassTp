@@ -10,7 +10,6 @@ namespace zf;
 
 
 use think\facade\Config;
-use think\facade\Session;
 
 class HttpClient
 {

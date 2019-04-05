@@ -9,8 +9,8 @@
 namespace app\common\model;
 
 
-class ${name}Model extends BaseModel
+class ${uc_name}Model extends BaseModel
 {
     protected $table = 'sys_${table}';
-    protected $append = ${append}
+    protected $append = ${append};
 }

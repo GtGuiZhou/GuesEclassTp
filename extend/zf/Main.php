@@ -91,6 +91,7 @@ class Main
      */
     public function timetable($act){
         $page =  $this->page->timetable($act);
+        file_put_contents('test.html',$page);
         $page = iconv('gb2312','utf-8',$page);
         return $this->parser->timetable($page);
     }
