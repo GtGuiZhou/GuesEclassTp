@@ -25,6 +25,13 @@ class Crud extends Command
      */
     protected $prefix = 'sys_';
 
+    /**
+     * 过滤验证字段
+     * 这里面的字段不会生成验证规则
+     * @var array
+     */
+    private $filterValidateField = ['create_time','update_time'];
+
     protected function configure()
     {
         $this->setName('crud')
@@ -112,7 +119,7 @@ class Crud extends Command
         $name = strtolower($name);
         $uc_name = ucfirst($name);
         $validate = 'app\\common\\validate\\'.$uc_name.'Validate';
-        $middle = $isBindUser?"->middleware('\\app\\http\\middleware\\UserBind::class')":'';
+        $middle = $isBindUser?"->middleware(\\app\\http\\middleware\\UserBind::class)":'';
         $route = <<<p
 <?php
 
@@ -127,18 +134,22 @@ p;
         $res = [];
         foreach ($fields as $field){
 
-            $key = $field['COLUMN_NAME'].'|'.($field['COLUMN_COMMENT']?$field['COLUMN_COMMENT']:$field['COLUMN_NAME']);
-            $require = $field['IS_NULLABLE'] == 'NO'?'require':'';
-            $length  = $field['CHARACTER_MAXIMUM_LENGTH']?"1,".$field['CHARACTER_MAXIMUM_LENGTH']:'';
-            $mobile  = strpos($field['COLUMN_NAME'],'phone') !== false || strpos($field['COLUMN_NAME'],'mobile') !== false?'mobile':'';
-            $number  = strpos($field['DATA_TYPE'],'int') !== false ? 'number':'';
-            // 过滤空规则
-            $rules = array_filter([
-                $require,$length,$mobile,$number
-            ],function ($item){return $item;});
-            $res[$key] = implode($rules,"|");
+            if ($field['COLUMN_KEY'] != 'PRI' && !in_array( $field['COLUMN_NAME'],$this->filterValidateField)) {
+                $key = $field['COLUMN_NAME'] . '|' . ($field['COLUMN_COMMENT'] ? $field['COLUMN_COMMENT'] : $field['COLUMN_NAME']);
+                $require = $field['IS_NULLABLE'] == 'NO' ? 'require' : '';
+                $length = $field['CHARACTER_MAXIMUM_LENGTH'] ? "length:1," . $field['CHARACTER_MAXIMUM_LENGTH'] : '';
+                $mobile = strpos($field['COLUMN_NAME'], 'phone') !== false || strpos($field['COLUMN_NAME'], 'mobile') !== false ? 'mobile' : '';
+                $number = strpos($field['DATA_TYPE'], 'int') !== false ? 'number' : '';
+                $url = strpos($field['COLUMN_NAME'], 'url') !== false?'url':'';
+                // 过滤空规则
+                $rules = array_filter([
+                    $require, $length, $mobile, $number,$url
+                ], function ($item) {
+                    return $item;
+                });
+                $res[$key] = implode($rules, "|");
+            }
         }
-
         return $res;
     }
 

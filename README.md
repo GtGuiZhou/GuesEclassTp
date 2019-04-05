@@ -13,7 +13,7 @@ $this->client->post('default2.aspx',['form_params'=>$data])->getBody()
 ```php
 php think crud test
 ```
-执行上面这一行命令会创建如下的文件
+执行上面这一行命令会创建如下的文件，并且每个文件内部都写了一些模板代码，只是替换了名字而已。
 - application\admin\controller\TestController
 - application\api\controller\TestController
 - application\common\model\TestModel

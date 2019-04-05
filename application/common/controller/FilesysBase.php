@@ -10,10 +10,9 @@ namespace app\common\controller;
 
 
 use app\common\model\FileSysModel;
-use think\Controller;
 use think\File;
 
-class FilesysBase extends Controller
+class FilesysBase extends CrudBase
 {
 
     /**
@@ -26,13 +25,13 @@ class FilesysBase extends Controller
      * 现在上传文件大小（单位：M)
      * @var int $limitUploadSize
      */
-    protected $limitUploadSize = 2;
+    protected $limitUploadSize = 50;
 
     /**
      * 允许上传的文件拓展
      * @var string $allowUploadExt
      */
-    protected $allowUploadExt  = 'bmp,jpeg,jpg,png,gif,mp3,mp4';
+    protected $allowUploadExt  = 'bmp,jpeg,jpg,png,gif,mp3,mp4,flv,rmvb,avi';
 
     public function initialize()
     {
@@ -58,10 +57,10 @@ class FilesysBase extends Controller
      * 下载本地的文件
      * @param $file
      * @param bool $unOpeninBrowser 是否不在浏览器中打开，意思就是如果是图像这个参数为false那么就直接显示图片，而不是下载图片
-     * @return \think\response\Download
      */
     private function localFileResponse($file,$unOpeninBrowser = false){
-        return download('./uploads/'.$file['local_path'],time(),false,360,$unOpeninBrowser);
+//        return download('./uploads/'.$file['local_path'],time(),false,360,$unOpeninBrowser);
+         $this->redirect('/uploads/'.$file['local_path']);
     }
 
     /**

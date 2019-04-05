@@ -48,6 +48,12 @@ class CrudBase extends Controller
     protected $limitAction = [];
 
     /**
+     * 过滤一些请求参数
+     * @var array
+     */
+    protected $filterInputField = [];
+
+    /**
      * 可以在这里定义执行index方法时的查询条件
      * @var \Closure
      */
@@ -173,7 +179,8 @@ class CrudBase extends Controller
      */
     public function add()
     {
-        $this->model->allowField(true)->save(input());
+        $data = array_filter(input(),function ($key){return !in_array($key,$this->filterInputField);});
+        $this->model->allowField(true)->save($data);
         switch ($this->addAfterResponseType){
             case 'model':
                 return success($this->model);
@@ -235,9 +242,8 @@ class CrudBase extends Controller
      */
     public function update()
     {
-
+        $data = array_filter(input(),function ($key){return !in_array($key,$this->filterInputField);});
         $model =  $this->model->findOrFail(input('id'));
-        $data = input();
         unset($data[$this->deleteTimeField]);
         $model->isUpdate(true)
             ->save($data);

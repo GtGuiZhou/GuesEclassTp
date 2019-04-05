@@ -13,5 +13,5 @@ use app\common\controller\FilesysBase;
 
 class FilesysController extends FilesysBase
 {
-
+    protected $limitAction = ['except' => 'upload'];
 }

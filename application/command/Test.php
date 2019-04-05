@@ -11,6 +11,7 @@ namespace app\command;
 
 use app\api\controller\ZfController;
 use app\common\model\UserModel;
+use app\http\middleware\SendVideoAuditEmail;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
@@ -26,9 +27,8 @@ class Test extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $crud = new Crud();
-//        $crud->parserRouter('sys_repair',true);
-        echo $crud->parserRouter('repair',true);
+        $send = new SendVideoAuditEmail();
+        $send->handle(null,function (){return null;});
     }
 
 
