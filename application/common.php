@@ -106,17 +106,3 @@ function uuid()
         '%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
     );
 }
-
-
-function send_email($to,$title,$content,$contentType = null)
-{
-    $transport = (new Swift_SmtpTransport('smtp.qq.com', 25))
-        ->setUsername(config('email.username'))
-        ->setPassword(config('email.password'));
-    $mailer = new Swift_Mailer($transport);
-    $message = (new Swift_Message($title))
-        ->setFrom([config('email.username') => config('email.username')])
-        ->setTo($to)
-        ->setBody($content, $contentType);
-    $mailer->send($message);
-}

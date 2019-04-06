@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修通知</title>
+</head>
+<body>
+<div style="max-width: 600px;text-align: center">
+    <table style="width: 600px" border="1" cellspacing="0" cellpadding="0">
+        <tr >
+            <td style="padding: 10px">手机</td>
+            <td style="padding: 10px">${phone}</td>
+        </tr>
+        <tr>
+              <td style="padding: 10px">保修内容</td>
+              <td style="padding: 10px">${content}</td>
+        </tr>
+        <tr>
+              <td style="padding: 10px">地址</td>
+              <td style="padding: 10px">${address}</td>
+        </tr>
+        <tr>
+              <td style="padding: 10px">创建时间</td>
+              <td style="padding: 10px">${create_time}</td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <a href="${handled_url}" style="
+            background: #409dfe;
+            display: inline-block;
+            text-decoration: none;
+            padding: 8px 50px;
+            width:80px;
+            line-height:40px;
+            border-radius: 5px;
+            color:white;">已处理</a>
+</div>
+</body>
+</html>

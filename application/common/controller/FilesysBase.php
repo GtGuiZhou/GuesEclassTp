@@ -10,6 +10,7 @@ namespace app\common\controller;
 
 
 use app\common\model\FileSysModel;
+use think\facade\Log;
 use think\File;
 
 class FilesysBase extends CrudBase
@@ -36,32 +37,43 @@ class FilesysBase extends CrudBase
     public function initialize()
     {
         $this->model = new FileSysModel();
+        parent::initialize();
     }
 
 
 
     public function read(){
+        // 获取原文件
         $file = $this->model
                 ->where('filename',input('filename'))
                 ->cache(true) // 永久缓存
                 ->findOrFail();
 
+        // 获取压缩文件
+        $size = input('size');
+        if ($size){
+            return $this->thumbResponse($file['local_path'],$size);
+        }
+
         if ($file['device'] == 'local'){
-            return $this->localFileResponse($file,input('?unOpeninBrowser'));
+            return redirect($file['local_path']);
         } else {
             return redirect($file['url']);
         }
     }
 
-    /**
-     * 下载本地的文件
-     * @param $file
-     * @param bool $unOpeninBrowser 是否不在浏览器中打开，意思就是如果是图像这个参数为false那么就直接显示图片，而不是下载图片
-     */
-    private function localFileResponse($file,$unOpeninBrowser = false){
-//        return download('./uploads/'.$file['local_path'],time(),false,360,$unOpeninBrowser);
-         $this->redirect('/uploads/'.$file['local_path']);
+    public function thumbResponse($path,$size){
+        $info = pathinfo($path);
+        $thumbPath = $info['dirname']."/$size".'_'.$info['basename'];
+        if (!file_exists($thumbPath)){
+            $image = \think\Image::open($path);
+            // 按照原图的比例生成一个最大为150*150的缩略图并保存为thumb.png
+            $image->thumb($size, $size)->save($thumbPath);
+        }
+        return redirect($thumbPath);
     }
+
+
 
     /**
      * 上传文件
@@ -89,7 +101,7 @@ class FilesysBase extends CrudBase
                 // 文件名称当前系统时间微秒的md5值
                 'filename' => $info->getFileName(),
                 'url'      => request()->domain() . '/api/filesys/read?filename='.$info->getFileName(),
-                'local_path'    => $info->getSaveName(),
+                'local_path' => 'uploads/'.$info->getSaveName(),
                 'mime'     => $info->getMime(),
                 'device'   => 'local',
             ]);

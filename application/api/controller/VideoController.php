@@ -11,6 +11,7 @@ namespace app\api\controller;
 
 use app\common\controller\ApiBase;
 use app\common\model\VideoModel;
+use think\View;
 
 class VideoController extends ApiBase
 {
@@ -25,12 +26,19 @@ class VideoController extends ApiBase
 
 
     public function through(){
-        $this->model->where('id',input('id'))->update(['state' => '通过']);
-        return success();
+        $this->model
+            ::useGlobalScope(false)
+            ->where('id',input('id'))
+            ->update(['state' => '通过']);
+        $this->redirect('static/view/audit_success');
+//        return success();
     }
 
     public function unthrough(){
-        $this->model->where('id',input('id'))->update(['state' => '未通过']);
-        return success();
+        $this->model
+            ::useGlobalScope(false)
+            ->where('id',input('id'))->update(['state' => '未通过']);
+        $this->redirect('static/view/audit_reject');
+//        return success();
     }
 }

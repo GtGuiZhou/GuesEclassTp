@@ -34,6 +34,17 @@ class AuditCode
     }
 
     /**
+     * 返回一个含有id的授权地址
+     * @param $url
+     * @param $id
+     * @return string
+     */
+    public static function auditUrl($url,$id){
+        return url($url,'audit_code='.AuditCode::build().'&id='.$id,false,true);
+    }
+
+
+    /**
      * 获取全球唯一标识
      * @return string
      */

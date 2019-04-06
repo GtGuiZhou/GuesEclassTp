@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>视频审核通知</title>
+</head>
+<body>
+<div style="max-width: 600px;text-align: center">
+    <video
+            style="width: 600px"
+            src="${video_url}" controls="controls">
+        您的浏览器不支持 video 标签。
+    </video>
+    <br>
+    <br>
+    <div >
+        <a href="${unthrough_url}" style="
+        margin-right: 100px;
+            background: #409dfe;
+            display: inline-block;
+            text-decoration: none;
+            width:80px;
+            line-height:40px;
+            border-radius: 5px;
+            color:white;">
+            不通过</a>
+
+        <a href="${through_url}" style="
+            background: #f78989;
+            display: inline-block;
+            text-decoration: none;
+            width:80px;
+            line-height:40px;
+            border-radius: 5px;
+            color:white;">通过</a>
+    </div>
+</div>
+</body>
+</html>

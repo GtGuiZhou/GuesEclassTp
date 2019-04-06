@@ -8,6 +8,9 @@
 ```
 $this->client->post('default2.aspx',['form_params'=>$data])->getBody()
 ```
+## 代码迁移或部署须知
+1.如果需要迁移含有redirect方法的代码，需要注意，我已经将本项目的伪静态后缀设为空，因为使用redirect函数会自动加上.html的后缀，而我不需要。
+
 ## 快速生成代码的命令
 ### 创建
 ```php
