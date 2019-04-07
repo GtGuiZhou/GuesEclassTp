@@ -19,7 +19,8 @@ use zf\ZFException;
 class Handle extends HandleBase
 {
     private $modelNotFoundMsg = [
-        'app\common\model\FileSysModel' => '该文件不存在'
+        'app\common\model\FileSysModel' => '该文件不存在',
+        'app\common\model\VideoMOdel' => '视频不存在，或暂时还未通过审核'
     ];
 
     public function render(Exception $e)

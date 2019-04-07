@@ -14,7 +14,7 @@ use app\common\model\UserModel;
 
 class UserController extends ApiBase
 {
-    protected $limitAction = ['except' => 'info'];
+    protected $limitAction = ['except' => 'info,usergroup'];
 
     protected function initialize()
     {
@@ -24,5 +24,14 @@ class UserController extends ApiBase
 
     public function info(){
         return success($this->user());
+    }
+
+    /**
+     * 读取多个数据
+     * @return \think\response\Json
+     */
+    public function group(){
+        $ids = input('ids');
+        return success($this->model->scope('simpleinfo')->select($ids));
     }
 }   

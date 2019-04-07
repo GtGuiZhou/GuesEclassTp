@@ -20,4 +20,9 @@ class UserModel extends BaseModel
       1 => 'update_time_text',
       2 => 'delete_time_text',
     );
+
+    public function scopeSimpleInfo($query)
+    {
+        $query->field('id,username');
+    }
 }

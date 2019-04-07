@@ -174,6 +174,15 @@ class CrudBase extends Controller
     }
 
     /**
+     * 读取多个数据
+     * @return \think\response\Json
+     */
+    public function reads(){
+        $ids = input('ids');
+        return success($this->model->select($ids));
+    }
+
+    /**
      * 新增一条数据
      * @return \think\response\Json
      */

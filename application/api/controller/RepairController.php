@@ -32,7 +32,7 @@ class RepairController extends ApiBase
      */
     public function handled(){
         $this->model->where('id',input('id'))->update(['state' => '已处理']);
-        $this->redirect('static/view/audit_success');
+        $this->redirect('static/view/audit_success.html');
     }
 
 }   

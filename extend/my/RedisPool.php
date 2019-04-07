@@ -9,7 +9,7 @@
 namespace my;
 
 
-class RedisPool
+abstract class RedisPool
 {
     /**
      * @var \Redis

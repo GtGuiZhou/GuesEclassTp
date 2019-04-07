@@ -9,7 +9,8 @@
 $this->client->post('default2.aspx',['form_params'=>$data])->getBody()
 ```
 ## 代码迁移或部署须知
-1.如果需要迁移含有redirect方法的代码，需要注意，我已经将本项目的伪静态后缀设为空，因为使用redirect函数会自动加上.html的后缀，而我不需要。
+1.如果需要迁移含有redirect方法的代码，需要注意，我已经将本项目的伪静态后缀设为空，因为他会导致使用redirect函数会自动加上.html的后缀，而我不需要。(设置位置/application/config/app.url_html_suffix)
+
 
 ## 快速生成代码的命令
 ### 创建
@@ -22,6 +23,9 @@ php think crud test
 - application\common\model\TestModel
 - application\common\validate\TestValidate
 - route\test
+#### 模块名称建议使用驼峰命名法
+以`php think crud test`做讲解，其中test为模块名称，它对应sys_text的数据库表名，如果你的表面为sys_xx_xx请使用驼峰命名法。
+例如：数据库表名为sys_love_wall那么你应该执行`php think crud loveWall`
 ### 删除
 ```php
 php think crud test -d 1

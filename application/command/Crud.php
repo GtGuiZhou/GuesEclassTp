@@ -44,13 +44,14 @@ class Crud extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $low_name =  strtolower(trim($input->getArgument('name')));
+        $name = trim(trim($input->getArgument('name')));
+        $low_name =  strtolower($name);
         $uc_name = ucfirst($low_name);
         $delete = $input->getOption('delete');
         $softdelete = $input->getOption('softdelete');
-        $table = strtolower($uc_name);
+        // 驼峰转下划线
+        $table = strtolower(preg_replace('/(?<=[a-zA-Z])([A-Z])/', '_$1', $name));
         $binduser = $input->getOption('binduser');
-
         if (!$uc_name){
             throw new Exception('name不能为空');
         }
@@ -122,8 +123,8 @@ class Crud extends Command
         $middle = $isBindUser?"->middleware(\\app\\http\\middleware\\UserBind::class)":'';
         $route = <<<p
 <?php
-
-\\think\\facade\\Route::post('api/$name/add','api/$name/add')
+// 请不要指定路由请求方法，以免发生更改请求方法来绕过路由验证。
+\\think\\facade\\Route::rule('api/$name/add','api/$name/add')
     ->validate('$validate')$middle;
 p;
         return $route;
@@ -141,9 +142,10 @@ p;
                 $mobile = strpos($field['COLUMN_NAME'], 'phone') !== false || strpos($field['COLUMN_NAME'], 'mobile') !== false ? 'mobile' : '';
                 $number = strpos($field['DATA_TYPE'], 'int') !== false ? 'number' : '';
                 $url = strpos($field['COLUMN_NAME'], 'url') !== false?'url':'';
+                $email = strpos($field['COLUMN_NAME'], 'email') !== false?'email':'';
                 // 过滤空规则
                 $rules = array_filter([
-                    $require, $length, $mobile, $number,$url
+                    $require, $length, $mobile, $number,$url,$email
                 ], function ($item) {
                     return $item;
                 });

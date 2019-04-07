@@ -15,8 +15,10 @@ use think\View;
 
 class VideoController extends ApiBase
 {
-    protected $limitAction = ['except' => 'add,indexall,through,unthrough'];
+    protected $limitAction = ['except' => 'add,indexall,through,unthrough,read'];
     protected $filterInputField = ['create_time','update_time','delete_time','state'];
+    protected $addAfterResponseType = 'model';
+
     protected function initialize()
     {
         $this->model = new VideoModel();
@@ -30,7 +32,7 @@ class VideoController extends ApiBase
             ::useGlobalScope(false)
             ->where('id',input('id'))
             ->update(['state' => '通过']);
-        $this->redirect('static/view/audit_success');
+        $this->redirect('static/view/audit_success.html');
 //        return success();
     }
 
@@ -38,7 +40,7 @@ class VideoController extends ApiBase
         $this->model
             ::useGlobalScope(false)
             ->where('id',input('id'))->update(['state' => '未通过']);
-        $this->redirect('static/view/audit_reject');
+        $this->redirect('static/view/audit_reject.html');
 //        return success();
     }
 }

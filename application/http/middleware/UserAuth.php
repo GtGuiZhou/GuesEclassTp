@@ -2,6 +2,8 @@
 
 namespace app\http\middleware;
 
+use app\common\model\UserModel;
+use think\exception\ValidateException;
 use think\Model;
 use think\Request;
 
@@ -12,12 +14,15 @@ use think\Request;
  */
 class UserAuth
 {
-    public function handle(Request $request, \Closure $next,Model $model)
+    public function handle(Request $request, \Closure $next, Model $model)
     {
-        $model = $model
-            ->where('id',$request->param('id'))
-            ->where('user_id',user()['id'])
-            ->findOrFail();
+
+        $flag = $model
+            ->where('id', $request->param('id'))
+            ->where('user_id', user()['id'])
+            ->find();
+        if (!$flag)
+            throw new ValidateException('该项数据不属于您，或您无权操作');
         return $next($request);
     }
 }

@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-\think\facade\Route::post('api/repair/add','api/repair/add')
+\think\facade\Route::rule('api/repair/add','api/repair/add')
     ->validate('app\common\validate\RepairValidate')
     ->middleware(\app\http\middleware\UserBind::class)
     ->middleware(\app\http\middleware\SendRepairEmail::class);

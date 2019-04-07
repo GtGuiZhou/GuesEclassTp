@@ -13,8 +13,9 @@ class UserBind
     public function handle($request, \Closure $next)
     {
         $user = user();
-        // 将userid注入到input中
+        // 将user的一些信息注入到input中
         $request->user_id = $user['id'];
+        $request->user_name = $user['username'];
         return $next($request);
     }
 }
