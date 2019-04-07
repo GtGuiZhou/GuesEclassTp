@@ -3,12 +3,13 @@ namespace app\index\controller;
 
 
 use app\common\model\UserModel;
+use think\Controller;
 use think\facade\Log;
 use think\facade\Session;
 use yb\YBOpenApi;
 use yb\YBUnPermissiveException;
 
-class IndexController
+class IndexController extends Controller
 {
     public function index()
     {
@@ -27,8 +28,8 @@ class IndexController
         $token = $info['visit_oauth']['access_token'];//轻应用获取的token
 
         Session::set('yb:token',$token);
-        var_export($info['visit_user']);
-        echo "<br/>";
+//        var_export($info['visit_user']);
+//        echo "<br/>";
         // 获取用户信息
         $user = UserModel::where('userid' , $info['visit_user']['userid'])->find();
         if (!$user){
@@ -36,8 +37,8 @@ class IndexController
             $user = $user->findOrFail($user['id']); // 防止字段缺失
         }
 
-        Session::set(config('session.sys:user'),$user);
+        Session::set(config('session.user'),$user);
 
-        redirect('/static/confront');
+        return $this->redirect('static/confront');
     }
 }

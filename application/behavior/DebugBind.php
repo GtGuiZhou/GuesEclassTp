@@ -17,7 +17,7 @@ class DebugBind
     public function run(){
         if (config('app_debug')){
             $user = UserModel::find(1);
-            Session::set(config('session.sys:user'),$user);
+            Session::set(config('session.user'),$user);
         }
     }
 }

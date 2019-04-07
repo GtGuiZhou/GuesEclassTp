@@ -18,3 +18,5 @@ php think optimize:route
 # 自定义命令
 echo '修改当前目录所有文件的所属权限'
 chown -R www:www ./ # 防止出现其它用户运行当前脚本改变文件的所属权限
+
+echo '所有操作都已经执行完毕'
