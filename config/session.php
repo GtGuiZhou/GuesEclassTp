@@ -23,4 +23,7 @@ return [
     'type'           => '',
     // 是否自动开启 SESSION
     'auto_start'     => true,
+
+    // 会话保存数据健名
+    'key_user' => 'sys:user'
 ];

@@ -36,7 +36,8 @@ class IndexController
             $user = $user->findOrFail($user['id']); // 防止字段缺失
         }
 
-        Session::set('sys:user',$user);
-        return success($user);
+        Session::set(config('session.sys:user'),$user);
+
+        redirect('/static/confront');
     }
 }
