@@ -39,6 +39,6 @@ class IndexController extends Controller
 
         Session::set(config('session.user'),$user);
 
-        return $this->redirect('static/confront');
+        return $this->redirect('/static/confront');
     }
 }
