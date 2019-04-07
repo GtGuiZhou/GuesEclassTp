@@ -74,7 +74,7 @@ function group_router_set($rule)
 function user()
 {
 
-    $user = \think\facade\Session::get(config('session.user'));
+    $user = \think\facade\Session::get(config('session.key_user'));
 
     if (!$user) {
         throw new \app\common\exception\UnLoginException();

@@ -37,7 +37,7 @@ class IndexController extends Controller
             $user = $user->findOrFail($user['id']); // 防止字段缺失
         }
 
-        Session::set(config('session.user'),$user);
+        Session::set(config('session.key_user'),$user);
 
         return $this->redirect('/static/confront');
     }

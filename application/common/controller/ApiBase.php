@@ -15,7 +15,8 @@ use think\facade\Session;
 class ApiBase extends CrudBase
 {
     public function user(){
-        $user = Session::get(config('session.user'));
+        $user = Session::get(config('session.key_user'));
+        var_dump($user);
         if (!$user){
             throw new UnLoginException();
         }
