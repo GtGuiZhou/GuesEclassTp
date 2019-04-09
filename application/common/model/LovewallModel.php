@@ -18,9 +18,9 @@ class LovewallModel extends BaseModel
         'comment_number'
     );
 
-    public function getCommentNumberAttr($data){
+    public function getCommentNumberAttr($value,$data){
         return CommentModel::where('module','lovewall:'.$data['id'])
-            ->cache(3600) // 缓存一个小时
+            ->cache(60) // 缓存一分钟
             ->count();
     }
 

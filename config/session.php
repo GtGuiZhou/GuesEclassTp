@@ -20,10 +20,18 @@ return [
     // SESSION 前缀
     'prefix'         => 'think',
     // 驱动方式 支持redis memcache memcached
-    'type'           => '',
+    'type'           => 'redis',
     // 是否自动开启 SESSION
     'auto_start'     => true,
 
+    // redis主机
+    'host' => \think\facade\Env::get('REDIS_HOSTNAME'),
+
+    // redis端口
+    'port'       => \think\facade\Env::get('REDIS_PORT'),
+    // 密码
+    'password'   => \think\facade\Env::get('REDIS_PASSWORD'),
+
     // 会话保存数据健名
-    'key_user' => 'sys:user'
+    'key_user' => 'sys:user' // 当前用户信息保存
 ];

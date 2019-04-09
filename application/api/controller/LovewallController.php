@@ -42,16 +42,16 @@ class LovewallController extends ApiBase
         $res = $res->getData();
         $res['data']['qr_code'] = url('/api/lovewall/readTemplate/id/'.$res['data']['id'],'',false,true);
 
-        $form_name = input('form_name');
+        $from = input('from_name');
         $template = input('template');
         $to_email = input('to_email');
         $content = input('content');
 
-        $form_name = $form_name?$form_name:'某个匿名';
+        $from = $from?$from:'某个匿名';
 
         if ($to_email){
             $email = new Email();
-            $email->setTitle("来至".$form_name."同学的一封信")
+            $email->setTitle("来至".$from."同学的一封信")
                 ->setContent($template?$template:$content)
                 ->setTo($to_email)->send();
         }

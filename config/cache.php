@@ -15,11 +15,22 @@
 
 return [
     // 驱动方式
-    'type'   => 'File',
+    'type'   => 'redis',
     // 缓存保存目录
     'path'   => '',
     // 缓存前缀
-    'prefix' => '',
+    'prefix' => 'tp_cache',
     // 缓存有效期 0表示永久缓存
     'expire' => 0,
+
+    // redis主机
+    'host' => \think\facade\Env::get('REDIS_HOSTNAME'),
+
+    // redis端口
+    'port'       => \think\facade\Env::get('REDIS_PORT'),
+    // 密码
+    'password'   => \think\facade\Env::get('REDIS_PASSWORD'),
+
+    // 全局缓存有效期（0为永久有效）
+
 ];
