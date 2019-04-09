@@ -7,6 +7,7 @@
  */
 
 return [
-    'host' => 'http://222.19.168.156/',
+    // 由于我校服务器不能访问教务系统，所有在自己的服务器上面配置了反向代理。
+    'host' => 'http://jwxt.eclass.guotao.pro/',
     'timeout' => 5
 ];
