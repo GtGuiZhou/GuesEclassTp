@@ -38,6 +38,9 @@ class VideoController extends ApiBase
             ::useGlobalScope(false)
             ->where('id',input('id'))
             ->update(['state' => '通过']);
+
+
+
         $this->redirect('static/view/audit_success.html');
 //        return success();
     }

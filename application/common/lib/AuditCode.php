@@ -40,7 +40,7 @@ class AuditCode
      * @return string
      */
     public static function auditUrl($url,$id){
-        return url($url,'audit_code='.AuditCode::build().'&id='.$id,false,true);
+        return url($url,'audit_code='.AuditCode::build().'&id='.$id,false,request()->domain());
     }
 
 
