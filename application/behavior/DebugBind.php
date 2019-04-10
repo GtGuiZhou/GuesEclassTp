@@ -9,6 +9,7 @@
 namespace app\behavior;
 
 
+use app\common\key\SessionKey;
 use app\common\model\UserModel;
 use think\facade\Session;
 
@@ -17,7 +18,7 @@ class DebugBind
     public function run(){
         if (config('app_debug')){
             $user = UserModel::find(1);
-            Session::set(config('session.key_user'),$user);
+            Session::set(SessionKey::$User,$user);
         }
     }
 }

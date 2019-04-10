@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人人墙</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei" ! important;
+            font-color:#222;
+        }
+        pre {
+            line-height: 2em;
+            font-family: "Microsoft YaHei" ! important;
+        }
+        h4 {
+            line-height: 2em;
+        }
+        #danmuarea {
+            position: relative;
+            background: #222;
+            width:800px;
+            height: 445px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .center {
+            text-align: center;
+        }
+        .ctr {
+            font-size: 1em;
+            line-height: 2em;
+        }
+    </style>
+</head>
+<body>
+Demo<br><br>
+<!--黑背景和弹幕区-->
+<div id="danmuarea">
+    <div id="danmu" >
+    </div>
+</div>
+<!--控制区-->
+<div class="ctr" >
+    <button type="button"  onclick="resumer() ">弹幕开始/继续</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="button"  onclick="pauser()">弹幕暂停</button>  &nbsp;&nbsp;&nbsp;&nbsp;
+    显示弹幕:<input type='checkbox' checked='checked' id='ishide' value='is' onchange='changehide()'> &nbsp;&nbsp;&nbsp;&nbsp;
+    弹幕透明度:
+    <input type="range" name="op" id="op" onchange="op()" value="100"> <br>
+    当前弹幕运行时间(秒)：<span id="time"></span>&nbsp;&nbsp;
+    设置当前弹幕时间(秒)： <input type="text" id="set_time" max=20 />
+    <button type="button"  onclick="settime()">设置</button>
+    <br>
+    发弹幕:
+    <select  name="color" id="color" >
+        <option value="white">白色</option>
+        <option value="red">红色</option>
+        <option value="green">绿色</option>
+        <option value="blue">蓝色</option>
+        <option value="yellow">黄色</option>
+    </select>
+    <select name="size" id="text_size" >
+        <option value="1">大文字</option>
+        <option value="0">小文字</option>
+    </select>
+    <select name="position" id="position"   >
+        <option value="0">滚动</option>
+        <option value="1">顶端</option>
+        <option value="2">底端</option>
+    </select>
+    <input type="textarea" id="text" max=300 />
+    <button type="button"  onclick="send()">发送</button>
+</div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./src/jquery.danmu.js"></script>
+
+    <script>
+        //初始化
+        $("#danmu").danmu({
+            left:0,
+            top:0,
+            height:"100%",
+            width:"100%",
+            speed:20000,
+            opacity:1,
+            font_size_small:16,
+            font_size_big:24,
+            top_botton_danmu_time:6000
+        });
+
+        //从后端获取到弹幕并添加
+        function query() {
+            $.get("/api/humanwall/commentList/id/2",function(data,status){
+                var danmu_from_sql=eval(data);
+                danmu_from_sql = danmu_from_sql.data
+                for (var i=0;i<danmu_from_sql.length;i++){
+                    var color = 'white'
+                    var size = 1
+                    var position = 0
+                    var time = $('#danmu').data("nowTime")+1;
+                    var text_obj = {"text": danmu_from_sql[i], "color": color, "size": size, "position": position, "time": time};
+                    console.log(text_obj)
+                    $('#danmu').danmu("addDanmu",text_obj);
+                }
+            });
+        }
+
+
+
+        //再添加三个弹幕
+        $("#danmu").danmu("addDanmu",[
+            { text:"这是滚动弹幕" ,color:"white",size:1,position:0,time:2}
+            ,{ text:"这是顶部弹幕" ,color:"yellow" ,size:1,position:1,time:2}
+            ,{ text:"这是底部弹幕" , color:"red" ,size:1,position:2,time:2}
+        ]);
+        //一个定时器，监视弹幕时间并更新到页面上
+        function timedCount(){
+            $("#time").text($('#danmu').data("nowTime"));
+
+            t=setTimeout("timedCount()",50)
+
+        }
+        timedCount();
+
+
+        var queryTimer = null
+        function starter(){
+            $('#danmu').danmu('danmuStart');
+             queryTimer = setInterval(query,1000)// 每隔一秒向服务器发送一次请求
+        }
+        function pauser(){
+            $('#danmu').danmu('danmuPause');
+            clearInterval(queryTimer)
+        }
+        function resumer(){
+            $('#danmu').danmu('danmuResume');
+            queryTimer = setInterval(query,1000)// 每隔一秒向服务器发送一次请求
+        }
+        function stoper(){
+            $('#danmu').danmu('danmuStop');
+            clearInterval(queryTimer)
+        }
+        function getime(){
+            alert($('#danmu').data("nowTime"));
+        }
+        function getpaused(){
+            alert($('#danmu').data("paused"));
+        }
+
+        //向后端添加弹幕测试  这个函数没有调用
+        function insert(){
+            var newd= { "text":"new2" , "color":"green" ,"size":"1","position":"0","time":50};
+            str_newd=JSON.stringify(newd);
+            // $.post("stone.php",{danmu:str_newd},function(data,status){alert(data)});
+        }
+
+        //发送弹幕，使用了文档README.md第7节中推荐的方法
+        function send(){
+            var text = document.getElementById('text').value;
+            var color = document.getElementById('color').value;
+            var position = document.getElementById('position').value;
+            var time = $('#danmu').data("nowTime")+1;
+            var size =document.getElementById('text_size').value;
+            var text_obj = {"text": text, "color": color, "size": size, "position": position, "time": time};
+            console.log(text_obj)
+            // $.post("stone.php",{danmu:text_obj});
+            $('#danmu').danmu("addDanmu",text_obj);
+            document.getElementById('text').value='';
+        }
+        //调整透明度函数
+        function op(){
+            var op=document.getElementById('op').value;
+            $('#danmu').danmu("setOpacity",op/100);
+        }
+
+        //调隐藏 显示
+        function changehide() {
+            var op = document.getElementById('op').value;
+            op = op / 100;
+            if (document.getElementById("ishide").checked) {
+                $("#danmu").danmu("setOpacity",1)
+            } else {
+                $("#danmu").danmu("setOpacity",0)
+
+            }
+        }
+
+        //设置弹幕时间
+        function settime(){
+            var t=document.getElementById("set_time").value;
+            t=parseInt(t)
+            $('#danmu').danmu("setTime",t);
+        }
+    </script>
+</body>
+</html>

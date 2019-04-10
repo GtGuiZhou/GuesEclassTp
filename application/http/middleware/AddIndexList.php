@@ -2,6 +2,7 @@
 
 namespace app\http\middleware;
 
+use app\common\key\RedisKey;
 use my\RedisPool;
 
 /**
@@ -27,6 +28,6 @@ class AddIndexList
     private function add($item,$type){
         $redis = RedisPool::instance();
         $item['show_type'] = $type;
-        $redis->lPush(config('redis.key_index_list'),json_encode($item));
+        $redis->lPush(RedisKey::$IndexList,json_encode($item));
     }
 }

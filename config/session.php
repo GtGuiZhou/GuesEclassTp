@@ -32,6 +32,4 @@ return [
     // 密码
     'password'   => \think\facade\Env::get('REDIS_PASSWORD'),
 
-    // 会话保存数据健名
-    'key_user' => 'sys:user' // 当前用户信息保存
 ];

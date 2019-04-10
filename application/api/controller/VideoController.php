@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 
 use app\common\controller\ApiBase;
+use app\common\key\RedisKey;
 use app\common\model\VideoModel;
 use my\RedisPool;
 
@@ -27,7 +28,7 @@ class VideoController extends ApiBase
 
     public function tagList(){
         $redis = RedisPool::instance();
-        $list = $redis->sMembers(config('redis.key_tag_video_list'));
+        $list = $redis->sMembers(RedisKey::$TagVideoList);
         return success($list);
     }
 

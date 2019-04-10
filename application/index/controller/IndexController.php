@@ -2,9 +2,9 @@
 namespace app\index\controller;
 
 
+use app\common\key\SessionKey;
 use app\common\model\UserModel;
 use think\Controller;
-use think\facade\Log;
 use think\facade\Session;
 use yb\YBOpenApi;
 use yb\YBUnPermissiveException;
@@ -37,7 +37,7 @@ class IndexController extends Controller
             $user = $user->findOrFail($user['id']); // 防止字段缺失
         }
 
-        Session::set(config('session.key_user'),$user);
+        Session::set(SessionKey::$User,$user);
 
         return $this->redirect('/static/confront');
     }

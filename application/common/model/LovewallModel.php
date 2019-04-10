@@ -27,6 +27,8 @@ class LovewallModel extends BaseModel
     // 定义全局的查询范围
     protected function base($query)
     {
+
+
         $query->order('id','desc');
     }
 }

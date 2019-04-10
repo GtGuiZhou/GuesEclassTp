@@ -44,3 +44,10 @@ php think crud test -s 1
 ```php
 php think crud test -b 1
 ```
+
+## 人人墙模块原理
+- 用户客户端提交评论数据-》后端中间件将数据保存在redis中，并设定key的过期时间，一般是5s过期-》保存到评论表里面
+- 播放弹幕客户端获取评论数据-》后端将最近n条数据返回
+tip:设定key过期时间是为了保证，用户不发评论，那么到了过期时间，播放客户端就没有数据了
+tip:如果redis中的评论数量超过n条就会在插入redis数据前，先清空弹幕数据。
+tip:具体配置在config/humanwall里面

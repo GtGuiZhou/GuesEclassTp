@@ -11,10 +11,4 @@ use think\facade\Env;
 return [
     'hostname'        => ENV::get('REDIS_HOSTNAME'),
     'port'        => ENV::get('REDIS_PORT'),
-    // 首页显示列表
-    'key_index_list' => 'index:list',
-    // 视频标签集合
-    'key_tag_video_list' => 'tag:video:list',
-    // 视频标签关联
-    'key_tag_video_relation' => 'tag:video:relation'
 ];

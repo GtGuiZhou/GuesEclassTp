@@ -12,6 +12,8 @@
 // 应用公共文件
 
 
+use app\common\key\SessionKey;
+
 function success($data = null, $msg = 'success')
 {
     return result($data, $msg, 0);
@@ -74,7 +76,7 @@ function group_router_set($rule)
 function user()
 {
 
-    $user = \think\facade\Session::get(config('session.key_user'));
+    $user = \think\facade\Session::get(SessionKey::$User);
 
     if (!$user) {
         throw new \app\common\exception\UnLoginException();
