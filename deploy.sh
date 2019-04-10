@@ -3,6 +3,8 @@ echo '安装包'
 composer install
 echo '开始执行部署脚本'
 # 可以使用下面的指令生成类库映射文件，提高系统自动加载的性能。
+echo '清空缓存'
+php think clear
 echo '生成类库映射文件...'
 php think optimize:autoload
 # 生成配置缓存文件
