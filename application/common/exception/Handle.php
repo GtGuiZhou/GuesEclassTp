@@ -50,7 +50,9 @@ class Handle extends HandleBase
             return warning($e->getMessage());
         }
 
+
+        return error($e->getMessage());
         // 其他错误交给系统处理
-        return parent::render($e);
+//        return parent::render($e);
     }
 }
