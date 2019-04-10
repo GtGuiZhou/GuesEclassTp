@@ -31,6 +31,6 @@ return [
     // 密码
     'password'   => \think\facade\Env::get('REDIS_PASSWORD'),
 
-    // 全局缓存有效期（0为永久有效）
-
+    // 首页列表接口缓存时间
+    'index_list' => 300
 ];
