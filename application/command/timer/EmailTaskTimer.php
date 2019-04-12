@@ -14,6 +14,7 @@ use app\common\model\EmailTaskModel;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
+use think\Exception;
 
 /**
  * 定时检测邮件并发送
@@ -31,22 +32,28 @@ class EmailTaskTimer implements ObserverInterface
             foreach ($list as $item) {
                 // 更改邮件状态为占用
                 $item->save(['state' => '2']);
-                $title = $item['title'];
-                $to = $item['to_email'];
-                $content = $item['content'];
-                $type = $item['content_type'];
-                // 发送邮件
-                $transport = (new Swift_SmtpTransport(config('email.host'), config('email.port')))
-                    ->setUsername(config('email.username'))
-                    ->setPassword(config('email.password'));
-                $mailer = new Swift_Mailer($transport);
-                $message = (new Swift_Message($title))
-                    ->setFrom([config('email.username') => config('email.name')])
-                    ->setTo($to)
-                    ->setBody($content, $type);
-                $mailer->send($message);
-                // 更改邮件状态为已发送
-                $item->save(['state' => '1']);
+                try{
+                    $title = $item['title'];
+                    $to = $item['to_email'];
+                    $content = $item['content'];
+                    $type = $item['content_type'];
+                    // 发送邮件
+                    $transport = (new Swift_SmtpTransport(config('email.host'), config('email.port')))
+                        ->setUsername(config('email.username'))
+                        ->setPassword(config('email.password'));
+                    $mailer = new Swift_Mailer($transport);
+                    $message = (new Swift_Message($title))
+                        ->setFrom([config('email.username') => config('email.name')])
+                        ->setTo($to)
+                        ->setBody($content, $type);
+                    $mailer->send($message);
+                    // 更改邮件状态为已发送
+                    $item->save(['state' => '1']);
+                } catch (Exception $e){
+
+                    println($e->getMessage() . ' - ' .date('y-m-d h:i:s'));
+                }
+
             }
         });
     }
