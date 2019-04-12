@@ -24,7 +24,7 @@ chown -R www:www ./ # 防止出现其它用户运行当前脚本改变文件的�
 # 由于阿里云封禁了25端口，因此让学校的服务器来发送邮件
 if [  -d "/opt/eclass" ];then
     echo '启动定时器任务'
-    nohup php think timer > timer.log 2>&1 &
+    nohup php think timer >> runtime/log/timer.log 2>&1
 fi
 
 echo '所有操作都已经执行完毕'
