@@ -5,6 +5,7 @@ namespace app\http\middleware;
 
 
 use app\common\lib\AuditCode;
+use app\common\model\EmailTaskModel;
 use my\Email;
 
 class SendRepairEmail
@@ -13,7 +14,7 @@ class SendRepairEmail
     {
         $res = $next($request);
         $email = new Email();
-        $email->setContent(file_get_contents('static/view/repair_email.html'))
+        $data = $email->setContent(file_get_contents('static/view/repair_email.html'))
             ->setTitle('报修通知')
             ->setTo(config('email.to_repair'))
             ->setVars([
@@ -22,8 +23,8 @@ class SendRepairEmail
                 'address' => input('address'),
                 'content' => input('content'),
                 'create_time' => date('Y-m-d h:i:s')
-            ])->send();
-
+            ])->getConfig();
+        EmailTaskModel::create($data);
         return $res;
     }
 }

@@ -14,6 +14,16 @@ class Email
     private $vars = [];
     private $to = [];
     private $title = '';
+
+    public function getConfig(){
+        return [
+          'content' => $this->content,
+          'to_email' => $this->to,
+          'title' => $this->title,
+          'content_type' => $this->contentType
+        ];
+    }
+
     public function send()
     {
         $conetnt = $this->content;
@@ -43,6 +53,8 @@ class Email
 
         return $content;
     }
+
+
 
 
     /**

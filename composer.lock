@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abd2c706387a56b0f8fd2e26574a9b0a",
+    "content-hash": "21c9bd4eb38f9636d0916d35b65d70e0",
     "packages": [
         {
             "name": "doctrine/lexer",
@@ -329,6 +329,58 @@
                 "url"
             ],
             "time": "2018-12-04T20:46:45+00:00"
+        },
+        {
+            "name": "owner888/phpspider",
+            "version": "v2.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/owner888/phpspider.git",
+                "reference": "e6021148adec201418c16ba26f39bc013ba5b4d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/owner888/phpspider/zipball/e6021148adec201418c16ba26f39bc013ba5b4d9",
+                "reference": "e6021148adec201418c16ba26f39bc013ba5b4d9",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "suggest": {
+                "ext-pcntl、ext-redis": "For better performance. "
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpspider\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Seatle Yang",
+                    "email": "seatle@foxmail.com",
+                    "homepage": "http://www.phpspider.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The PHPSpider Framework.",
+            "homepage": "http://www.phpspider.org",
+            "keywords": [
+                "framework",
+                "phpspider"
+            ],
+            "time": "2018-08-15T08:04:29+00:00"
         },
         {
             "name": "psr/http-message",

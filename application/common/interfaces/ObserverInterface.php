@@ -6,7 +6,7 @@
  * Time: 下午9:03
  */
 
-namespace app\http\middleware\comment;
+namespace app\common\interfaces;
 
 
 interface ObserverInterface

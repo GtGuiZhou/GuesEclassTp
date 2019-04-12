@@ -52,3 +52,10 @@ tip:config/humanwall里面为人人墙配置信息
 
 ## 缓存
 - php think clear 指令无法清除缓存在redis中的数据，如果你选用redis作为缓存驱动，那么该指令无效
+## 爬虫
+https://doc.phpspider.org/configs-members.html
+## 定时器
+- 内置了定时器命令，php需要安装swoole拓展
+- 使用时可以执行`nohup php think timer > timer.log 2>&1 &`,达到后台运行定时器，并且将日志输出到timer.log中
+- 需要自定义定时器，直接在/application/command/timer文件夹新建一个类，并且继承ObserverInterface接口
+- 注意：你需要在自己定义的定时类中，调用swoole_timer_tick来实现定时效果，定时器命令只是负责自动发现自定义定时类，和运行定时类的handle方法

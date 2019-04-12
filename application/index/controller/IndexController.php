@@ -17,7 +17,7 @@ class IndexController extends Controller
         //初始化
         $api = YBOpenApi::getInstance()->init(config('yb.AppID'), config('yb.AppSecret'), config('yb.CallBack'));
         $iapp  = $api->getIApp();
-
+        
         //轻应用获取access_token，未授权则跳转至授权页面
         try{
             $info = $iapp->perform();

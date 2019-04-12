@@ -9,6 +9,7 @@
 namespace app\http\middleware\comment;
 
 
+use app\common\interfaces\ObserverInterface;
 use app\common\key\RedisKey;
 use my\RedisPool;
 

@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 
 use app\common\controller\ApiBase;
+use app\common\model\EmailTaskModel;
 use app\common\model\LovewallModel;
 use my\Email;
 
@@ -51,9 +52,10 @@ class LovewallController extends ApiBase
 
         if ($to_email){
             $email = new Email();
-            $email->setTitle("来至".$from."同学的一封信")
+            $data = $email->setTitle("来至".$from."同学的一封信")
                 ->setContent($template?$template:$content)
-                ->setTo($to_email)->send();
+                ->setTo($to_email)->getConfig();
+            EmailTaskModel::create($data);
         }
 
         // 删除template，减少传输数据
