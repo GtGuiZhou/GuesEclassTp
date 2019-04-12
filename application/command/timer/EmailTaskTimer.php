@@ -50,7 +50,8 @@ class EmailTaskTimer implements ObserverInterface
                     // 更改邮件状态为已发送
                     $item->save(['state' => '1']);
                 } catch (Exception $e){
-
+                    // 更改邮件状态为发送失败
+                    $item->save(['state' => '3']);
                     println($e->getMessage() . ' - ' .date('y-m-d h:i:s'));
                 }
 

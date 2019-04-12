@@ -10,5 +10,6 @@
 // +----------------------------------------------------------------------
 
 return [
-    'timer' => 'app\command\timer\TimerObserver'
+    'timer' => 'app\command\timer\TimerObserver',
+    'email_task' => 'app\command\EmailTaskTimer'
 ];
