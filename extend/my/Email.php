@@ -16,8 +16,13 @@ class Email
     private $title = '';
 
     public function getConfig(){
+        $conetnt = $this->content;
+        // 渲染内容
+        if (count($this->vars) > 0){
+            $conetnt = $this->view($this->content,$this->vars);
+        }
         return [
-          'content' => $this->content,
+          'content' => $conetnt,
           'to_email' => $this->to,
           'title' => $this->title,
           'content_type' => $this->contentType

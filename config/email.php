@@ -7,8 +7,8 @@
  */
 
 return [
-    'host' => 'smtp.qq.com',
-    'port' => 25,
+    'host' => 'ssl://smtp.qq.com',
+    'port' => 465,
     'username' => \think\facade\Env::get('EMAIL_USERNAME'),
     'password' => \think\facade\Env::get('EMAIL_PASSWORD'),
     'name'     => '贵州工程应用技术学院易班发展中心后台系统',
