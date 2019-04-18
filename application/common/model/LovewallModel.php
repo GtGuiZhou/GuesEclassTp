@@ -18,12 +18,6 @@ class LovewallModel extends BaseModel
         'comment_number'
     );
 
-    public function getCommentNumberAttr($value,$data){
-        return CommentModel::where('module','lovewall:'.$data['id'])
-            ->cache(60) // 缓存一分钟
-            ->count();
-    }
-
     // 定义全局的查询范围
     protected function base($query)
     {

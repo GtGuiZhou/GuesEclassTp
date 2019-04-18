@@ -7,46 +7,60 @@
  */
 require_once __DIR__ . '/vendor/autoload.php';
 
-use phpspider\core\phpspider;
 
-//
-//$html = file_get_contents('test.html');
-//// 学校
-//$data = selector::select($html, "//section[@class='yiban-news']//a//b//text()");
-//var_dump($data);
-//// 标题
-//$data = selector::select($html, "//section[@class='yiban-news']//a//span/text()");
-//var_dump($data);
+use \phpspider\core\requests;
 
-$configs = array(
-    'name' => '糗事百科',
-    'domains' => array(
-        'qiushibaike.com',
-        'www.qiushibaike.com'
-    ),
-    'scan_urls' => array(
-        'http://www.qiushibaike.com/'
-    ),
-    'content_url_regexes' => array(
-        "http://www.qiushibaike.com/article/\d+"
-    ),
-    'list_url_regexes' => array(
-        "http://www.qiushibaike.com/8hr/page/\d+\?s=\d+"
-    ),
-    'fields' => array(
-        array(
-            // 抽取内容页的文章内容
-            'name' => "article_content",
-            'selector' => "//*[@id='single-next-link']",
-            'required' => true
-        ),
-        array(
-            // 抽取内容页的文章作者
-            'name' => "article_author",
-            'selector' => "//div[contains(@class,'author')]//h2",
-            'required' => true
-        ),
-    ),
-);
-$spider = new phpspider($configs);
-$spider->start();
+
+$page = requests::get('http://www.yiban.cn');
+
+
+
+$p = <<<EOF
+@<a.*?href="([^"]*?)"[^>]*?>\s+<span><b>(.+?)</b>(.+?)</span>\s+?</a>@s
+EOF;
+
+preg_match_all($p,$page,$matches);
+$list = [];
+for ($i =0;$i < count($matches[1]);$i++){
+    $link = $matches[1][$i];
+    list ($read_number,$like_number,$content) = parserArticle($link);
+    array_push($list,[
+            'school' => $matches[2][$i],
+            'title' => $matches[3][$i],
+            'link' => $matches[1][$i],
+            'read_number' => $read_number,
+            'like_number' => $like_number,
+            'content'   => $content
+        ]
+    );
+}
+
+\think\Db::table('yb_top_article')->insertAll([$list]);
+//var_dump($list);
+
+function parserArticle($url){
+    var_dump($url);
+    preg_match("@article_id/(\d+)@",$url,$matches);
+    $article_id = $matches[1];
+    preg_match("@channel_id/(\d+)@",$url,$matches);
+    $channel_id = $matches[1];
+    preg_match("@puid/(\d+)@",$url,$matches);
+    $puid = $matches[1];
+    $url = 'http://www.yiban.cn/forum/reply/listAjax';
+
+    $json = requests::post($url,[
+        'article_id' => $article_id,
+        'channel_id' => $channel_id,
+        'puid' => $puid
+    ]);
+
+
+    $json = json_decode($json,true);
+    $article = $json['data']['list']['article'];
+    $read_number = $article['clicks'];
+    $like_number = $article['upCount'];
+    $content = $article['content'];
+    $id = $article['id'];
+    return [$id,$read_number,$like_number,$content];
+//    preg_match('@阅读数： (\d+)@',$page,$matches);
+}

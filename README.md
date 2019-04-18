@@ -46,7 +46,7 @@ php think crud test -b 1
 ```
 
 ## 人人墙模块原理
-- 用户客户端提交评论数据-》后端中间件将数据保存在redis中，并设定key的过期时间，一般是5s过期-》保存到评论表里面
+- 用户客户端提交评论数据-》后端中间件将数据保存在readedis中，并设定key的过期时间，一般是5s过期-》保存到评论表里面
 - 播放弹幕客户端获取评论数据-》后端所有数据返回并且晴空
 tip:config/humanwall里面为人人墙配置信息
 
@@ -54,6 +54,9 @@ tip:config/humanwall里面为人人墙配置信息
 - php think clear 指令无法清除缓存在redis中的数据，如果你选用redis作为缓存驱动，那么该指令无效
 ## 爬虫
 https://doc.phpspider.org/configs-members.html
+### 爬取头条
+每天晚上十点爬取一次头条。
+
 ## 定时器 
 - 内置了定时器命令，php需要安装swoole拓展
 - 使用时可以执行`nohup php think timer >> runtime/log/timer.log 2>&1 &`,达到后台运行定时器，并且将日志输出到timer.log中
@@ -61,3 +64,6 @@ https://doc.phpspider.org/configs-members.html
 - 注意：你需要在自己定义的定时类中，调用swoole_timer_tick来实现定时效果，定时器命令只是负责自动发现自定义定时类，和运行定时类的handle方法
 （暂时无法正常使用，因为，nohup php think timer >> runtime/log/timer.log 2>&1 &无法在断开ssh后继续后台执行）
  (暂时使用宝塔面板的计划任务功能)
+ 
+## 邮件功能
+在.env文件中保存有邮件的账号密码 

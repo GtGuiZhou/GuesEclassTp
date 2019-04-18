@@ -11,5 +11,6 @@
 
 return [
     'timer' => 'app\command\timer\TimerObserver',
-    'email_task' => 'app\command\EmailTaskTimer'
+    'email_task' => 'app\command\EmailTaskTimer',
+    'top_article_spider' => 'app\command\TopArticleSpider'
 ];

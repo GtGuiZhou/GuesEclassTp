@@ -3,13 +3,13 @@
 namespace app\command;
 
 use app\common\model\EmailTaskModel;
-use Exception;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
+use think\Exception;
 use think\facade\Log;
 
 class EmailTaskTimer extends Command
@@ -18,8 +18,6 @@ class EmailTaskTimer extends Command
     {
         // 指令配置
         $this->setName('app\command\emailtasktimer');
-        // 设置参数
-        
     }
 
     protected function execute(Input $input, Output $output)
@@ -51,7 +49,6 @@ class EmailTaskTimer extends Command
                 $item->save(['state' => '3']);
                 Log::notice($e->getMessage() . ' - ' .date('y-m-d h:i:s'));
             }
-
         }
     }
 }

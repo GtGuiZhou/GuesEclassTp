@@ -13,7 +13,17 @@ class CommentModel extends BaseModel
 {
     protected $table = 'sys_comment';
     protected $append = array (
-  0 => 'create_time_text',
-  1 => 'update_time_text',
-);
+      0 => 'create_time_text',
+      1 => 'update_time_text',
+    );
+
+    protected static function init()
+    {
+        self::event('after_insert',function ($comment){
+            list($module,$id) = implode(':',$comment['module']);
+            if ($module == 'lovewall'){
+                VideoModel::where('id',$id)->setInc('comment_number');
+            }
+        });
+    }
 }
