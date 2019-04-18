@@ -15,6 +15,5 @@ return [
 
     // 发送邮箱列表
     'to_video_audit' => ['735311619@qq.com'],
-//    'to_repair' => ['2631790782@qq.com','735311619@qq.com'],
-    'to_repair' => ['735311619@qq.com'],
+    'to_repair' => ['2631790782@qq.com','735311619@qq.com'],
 ];
