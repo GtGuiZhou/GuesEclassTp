@@ -3,6 +3,7 @@
 namespace app\command\report;
 
 use app\common\key\RedisManager;
+use app\common\model\EmailTaskModel;
 use app\common\model\RepairModel;
 use app\common\model\ToparticleModel;
 use my\Email;
@@ -39,7 +40,7 @@ class DayReport extends Command
         ]);
 
     	$email = new Email('日常报告',$html,config('email.to_report_day'));
-    	$email->send();
+        EmailTaskModel::create($email->getConfig());
     	$output->writeln('发送报告成功');
     }
 }
