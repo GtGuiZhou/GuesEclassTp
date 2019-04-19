@@ -23,9 +23,6 @@ class ToparticleModel extends BaseModel
 
     public function spider()
     {
-        if (count($this->whereTime('update_time','today')->select()) > 0){
-            throw new ValidateException('今天已经爬取过了头条');
-        }
 
         $page = requests::get('http://www.yiban.cn');
         $p = <<<EOF
@@ -44,14 +41,25 @@ EOF;
                     'read_number' => $read_number,
                     'like_number' => $like_number,
                     'content' => $content,
-                    'article_id' => $id,
+                    'id' => $id,
                     'create_time' => $create_time,
                     'update_time' => time()
                 ]
             );
         }
 
-        $this->insertAll($list);
+        foreach ($list as $item){
+            try{
+                $model = ToparticleModel::get($item['id']);
+                if ($model){
+                    $model->isUpdae(true)->save(['update_time' => time()]);
+                } else {
+                    ToparticleModel::create($item);
+                }
+            } catch (Exception $e){
+                continue;
+            }
+        }
 
     }
 
