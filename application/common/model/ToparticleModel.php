@@ -12,6 +12,7 @@ namespace app\common\model;
 use phpspider\core\requests;
 use think\Exception;
 use think\exception\PDOException;
+use think\exception\ValidateException;
 
 class ToparticleModel extends BaseModel
 {
@@ -22,6 +23,10 @@ class ToparticleModel extends BaseModel
 
     public function spider()
     {
+        if (count($this->whereTime('update_time','today')->select()) > 0){
+            throw new ValidateException('今天已经爬取过了头条');
+        }
+
         $page = requests::get('http://www.yiban.cn');
         $p = <<<EOF
 @<a.*?href="([^"]*?)"[^>]*?>\s+<span><b>(.+?)</b>(.+?)</span>\s+?</a>@s
@@ -39,12 +44,12 @@ EOF;
                     'read_number' => $read_number,
                     'like_number' => $like_number,
                     'content' => $content,
-                    'id' => $id,
-                    'create_time' => $create_time
+                    'article_id' => $id,
+                    'create_time' => $create_time,
+                    'update_time' => time()
                 ]
             );
         }
-
 
         $this->insertAll($list);
 

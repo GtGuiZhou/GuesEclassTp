@@ -9,7 +9,9 @@
 namespace app\common\exception;
 
 
+use app\common\key\RedisManager;
 use Exception;
+use think\cache\driver\Redis;
 use think\db\exception\ModelNotFoundException;
 use think\exception\Handle as HandleBase;
 use think\exception\HttpException;
@@ -25,6 +27,8 @@ class Handle extends HandleBase
 
     public function render(Exception $e)
     {
+        RedisManager::incExceptionNumber();
+
         // 参数验证错误
         if ($e instanceof ValidateException) {
             return warning($e->getMessage());

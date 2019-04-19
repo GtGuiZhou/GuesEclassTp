@@ -14,7 +14,7 @@ use app\common\controller\FilesysBase;
 class FilesysController extends FilesysBase
 {
 
-    protected $limitAction = ['except' => 'upload,read'];
+    protected $limitAction = ['except' => 'upload,read,clipUpload'];
 
     public function initialize()
     {

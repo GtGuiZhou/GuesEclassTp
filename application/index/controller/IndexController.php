@@ -2,8 +2,10 @@
 namespace app\index\controller;
 
 
+use app\common\key\RedisManager;
 use app\common\key\SessionKey;
 use app\common\model\UserModel;
+use my\RedisPool;
 use think\Controller;
 use think\facade\Session;
 use yb\YBOpenApi;

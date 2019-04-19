@@ -32,4 +32,6 @@ return [
     // 密码
     'password'   => \think\facade\Env::get('REDIS_PASSWORD'),
 
+    // 会话过期时间
+    'expire'  => '86400' //24小时
 ];

@@ -10,6 +10,7 @@ namespace app\command;
 
 
 use app\api\controller\ZfController;
+use app\common\key\RedisManager;
 use app\common\model\UserModel;
 use app\http\middleware\SendVideoAuditEmail;
 use think\console\Command;
@@ -27,8 +28,7 @@ class Test extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $send = new SendVideoAuditEmail();
-        $send->handle(null,function (){return null;});
+        var_dump(RedisManager::getViewNumber7Days());
     }
 
 

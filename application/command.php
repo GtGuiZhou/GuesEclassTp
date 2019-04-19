@@ -12,5 +12,6 @@
 return [
     'timer' => 'app\command\timer\TimerObserver',
     'email_task' => 'app\command\EmailTaskTimer',
-    'top_article_spider' => 'app\command\TopArticleSpider'
+    'top_article_spider' => 'app\command\TopArticleSpider',
+    'report_day' => 'app\command\report\DayReport'
 ];

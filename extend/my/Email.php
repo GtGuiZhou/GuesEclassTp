@@ -15,6 +15,15 @@ class Email
     private $to = [];
     private $title = '';
 
+    public function __construct($title = '',$content = '',$to = [],$contentType = 'text/html',$vars = [])
+    {
+        $this->content = $content;
+        $this->title = $title;
+        $this->to = $to;
+        $this->contentType = $contentType;
+        $this->vars = $vars;
+    }
+
     public function getConfig(){
         $conetnt = $this->content;
         // 渲染内容

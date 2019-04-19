@@ -19,4 +19,11 @@ class RedisKey
     public static $TagVideoRelation = 'tag:video:relation';
     // 人人墙评论列表
     public static $HumanwallCommentList = 'humanwall:comment:list';
+    // 访问量
+    public static $VIEW_NUMBER = 'view:number';
+    // 异常量
+    public static $EXCEPTION_NUMBER = 'exception:number';
+
+
+
 }

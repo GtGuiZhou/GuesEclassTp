@@ -119,6 +119,48 @@ class FilesysBase extends CrudBase
         }}
 
 
+
+        public function clipUpload(){
+            $file = request()->file('file');
+            if (!$file){
+                return json([
+                    'code' => 1011,
+                    'msg'  => '上传文件不存在',
+                    'data' => null
+                ]);
+            }
+            $filename = input('filename').time().rand(0,1000000000);
+            $path = './uploads/bigfile/'.$filename;
+
+            if (is_dir('./uploads/bigfile'))
+                mkdir('./uploads/bigfile');
+
+            file_put_contents($path,$file,FILE_APPEND);
+
+            if (input('index') == input('totalPieces')){
+                $info = new File($path);
+                $model = FileSysModel::create([
+                    // 文件名称当前系统时间微秒的md5值
+                    'filename' => $info->getFileName(),
+                    'url'      => request()->domain() . '/api/filesys/read?filename='.$info->getFileName(),
+                    'local_path' => 'uploads/'.$info->getSaveName(),
+                    'mime'     => $info->getMime(),
+                    'device'   => 'local',
+                ]);
+                return json([
+                    'code' => 0,
+                    'msg'  => 'success',
+                    'data' => $model
+                ]);
+            } else {
+                return json([
+                    'code' => 0,
+                    'msg'  => 'success',
+                ]);
+            }
+        }
+
+
         /**
          * 添加允许上传的文件类型
          * @param $ext string
@@ -126,4 +168,8 @@ class FilesysBase extends CrudBase
         protected function appendAllowExt($ext){
             $this->allowUploadExt = "$this->allowUploadExt,$ext";
         }
+
+
+
+
 }
