@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+return # 先停止使用部署脚本
 echo '安装包'
 composer install
 echo '开始执行部署脚本'
