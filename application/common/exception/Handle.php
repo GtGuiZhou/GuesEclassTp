@@ -11,11 +11,13 @@ namespace app\common\exception;
 
 use app\common\key\RedisManager;
 use Exception;
+use function GuzzleHttp\Psr7\uri_for;
 use think\cache\driver\Redis;
 use think\db\exception\ModelNotFoundException;
 use think\exception\Handle as HandleBase;
 use think\exception\HttpException;
 use think\exception\ValidateException;
+use think\facade\View;
 use zf\ZFException;
 
 class Handle extends HandleBase
@@ -27,7 +29,11 @@ class Handle extends HandleBase
 
     public function render(Exception $e)
     {
+
         RedisManager::incExceptionNumber();
+
+        if (config('APP_DEBUG'))
+            return parent::render($e);// 调试时，错误交给系统处理
 
         // 参数验证错误
         if ($e instanceof ValidateException) {
@@ -36,27 +42,26 @@ class Handle extends HandleBase
 
         // 请求数据不存在
         if ($e instanceof ModelNotFoundException) {
-            $modelMsg = $e->getModel().'不存在';
+            $modelMsg = $e->getModel() . '不存在';
             isset($this->modelNotFoundMsg[$e->getModel()]) && $modelMsg = $this->modelNotFoundMsg[$e->getModel()];
             return warning($modelMsg);
         }
 
         // 用户操作不规范产生的异常，例如密码输入错误
-        if ($e instanceof HttpException){
+        if ($e instanceof HttpException) {
             return error($e->getMessage());
         }
 
-        if ($e instanceof UnLoginException){
-            return result(null, '未登录，不允许操作',401);
+        if ($e instanceof UnLoginException) {
+            return result(null, '未登录，不允许操作', 401);
         }
 
-        if ($e instanceof ZFException){
+        if ($e instanceof ZFException) {
             return warning($e->getMessage());
         }
 
 
         return error($e->getMessage());
-        // 其他错误交给系统处理
-//        return parent::render($e);
+
     }
 }

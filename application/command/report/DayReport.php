@@ -31,6 +31,8 @@ class DayReport extends Command
         $exception_number = RedisManager::getExceptionNumber7Days();
         $date_range = array_keys($view_number);
 
+        //todo:添加微博、微信、半月谈等头条
+
         $html = View::display(file_get_contents('application/api/view/report/day.html'),[
             'repair_list' => $repair,
             'top_article_list' => $topArticle,
@@ -41,6 +43,5 @@ class DayReport extends Command
 
     	$email = new Email('日常报告',$html,config('email.to_report_day'));
         EmailTaskModel::create($email->getConfig());
-    	$output->writeln('发送报告成功');
     }
 }

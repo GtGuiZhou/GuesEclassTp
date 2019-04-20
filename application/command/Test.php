@@ -17,6 +17,7 @@ use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use think\facade\Session;
+use think\facade\View;
 use zf\Main;
 
 class Test extends Command
@@ -28,7 +29,8 @@ class Test extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        var_dump(RedisManager::getViewNumber7Days());
+        echo __DIR__;
+        echo View::fetch('static/view/error/index.html',['content' => 'test']);
     }
 
 

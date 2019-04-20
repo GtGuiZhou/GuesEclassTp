@@ -10,6 +10,7 @@ namespace app\common\controller;
 
 
 use app\common\model\FileSysModel;
+use think\exception\ValidateException;
 use think\facade\Log;
 use think\File;
 
@@ -88,57 +89,113 @@ class FilesysBase extends CrudBase
                 'data' => null
             ]);
         }
-        // 移动到框架应用/public/uploads/ 目录下
-        /**
-         * @var $file File
-         */
-        $info = $file
-            ->validate(['size'=>$this->limitUploadSize * 1024 * 1024,'ext'=>$this->allowUploadExt])
-            ->move( './uploads');
 
-        if($info){
-            $model = FileSysModel::create([
-                // 文件名称当前系统时间微秒的md5值
-                'filename' => $info->getFileName(),
-                'url'      => request()->domain() . '/api/filesys/read?filename='.$info->getFileName(),
-                'local_path' => 'uploads/'.$info->getSaveName(),
-                'mime'     => $info->getMime(),
-                'device'   => 'local',
-            ]);
-            return json([
-               'code' => 0,
-               'msg'  => 'success',
-               'data' => $model
-            ]);
-        }else{
-            return json([
-                'code' => 1012,
-                'msg'  => $file->getError(),
-                'data' => null
-            ]);
-        }}
+        return $this->moveFile($file);
+    }
 
 
 
         public function clipUpload(){
-            $file = request()->file('file');
-            if (!$file){
+            $res = $this->validate(input(),[
+                'filename' => 'require|length:1,255',
+                'index' => 'require|number',
+                'totalPieces' => 'require|number',
+            ]);
+
+            if (true !== $res){
+                return json([
+                    'code' => 1011,
+                    'msg'  => $res,
+                    'data' => null
+                ]);
+            }
+
+            if (input('index') > input('totalPieces')){
+                return json([
+                    'code' => 1011,
+                    'msg'  => 'index不能大于totalPieces',
+                    'data' => null
+                ]);
+            }
+
+            if (!isset($_FILES['file']) || !isset($_FILES['file']['tmp_name']))
+            {
                 return json([
                     'code' => 1011,
                     'msg'  => '上传文件不存在',
                     'data' => null
                 ]);
             }
-            $filename = input('filename').time().rand(0,1000000000);
-            $path = './uploads/bigfile/'.$filename;
 
-            if (is_dir('./uploads/bigfile'))
-                mkdir('./uploads/bigfile');
-
+            $temp_path = $_FILES['file']['tmp_name'];
+            $file = file_get_contents($temp_path);
+            $filename = input('filename');
+            $path = '/tmp/'.$filename;
             file_put_contents($path,$file,FILE_APPEND);
-
+            unlink($temp_path);
             if (input('index') == input('totalPieces')){
-                $info = new File($path);
+                // 无法使用file的move方法，因为move方法内只能移动上传文件
+                $file = new File($path);
+                // 规则验证
+                if(!$file->validate(['size'=>$this->limitUploadSize * 1024 * 1024,'ext'=>$this->allowUploadExt])->check())
+                    throw new ValidateException($file->getError());
+                // 验证上传
+                if (!$file->check())
+                    throw new ValidateException($file->getError());
+                $path = './uploads';
+                $path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                // 文件保存命名规则
+                $saveName = $file->buildSaveName(true, true);
+                $filename = $path . $saveName;
+
+                // 检测目录
+                if (false === $file->checkPath(dirname($filename))) {
+                    throw new ValidateException($file->getError());
+                }
+
+                /* 不覆盖同名文件 */
+                if (is_file($filename)) {
+                    throw new ValidateException('文件重复，请重新上传');
+                }
+
+
+                /* 移动文件 */
+                if (!move_uploaded_file($file->getRealPath() ?: $file->getPathname(), $filename)) {
+                    return false;
+                }
+
+                // 返回 File对象实例
+                $file = new File($filename);
+                $file->setSaveName($saveName);
+                $file->setUploadInfo($this->info);
+            }
+
+            return json([
+                'code' => 0,
+                'msg'  => 'success',
+            ]);
+        }
+
+
+        /**
+         * 添加允许上传的文件类型
+         * @param $ext string
+         */
+        protected function appendAllowExt($ext){
+            $this->allowUploadExt = "$this->allowUploadExt,$ext";
+        }
+
+
+        protected function moveFile($file){
+            // 移动到框架应用/public/uploads/ 目录下
+            /**
+             * @var $file File
+             */
+            $info = $file
+                ->validate(['size'=>$this->limitUploadSize * 1024 * 1024,'ext'=>$this->allowUploadExt])
+                ->move( './uploads');
+
+            if($info){
                 $model = FileSysModel::create([
                     // 文件名称当前系统时间微秒的md5值
                     'filename' => $info->getFileName(),
@@ -152,23 +209,14 @@ class FilesysBase extends CrudBase
                     'msg'  => 'success',
                     'data' => $model
                 ]);
-            } else {
+            }else{
                 return json([
-                    'code' => 0,
-                    'msg'  => 'success',
+                    'code' => 1012,
+                    'msg'  => $file->getError(),
+                    'data' => null
                 ]);
             }
         }
-
-
-        /**
-         * 添加允许上传的文件类型
-         * @param $ext string
-         */
-        protected function appendAllowExt($ext){
-            $this->allowUploadExt = "$this->allowUploadExt,$ext";
-        }
-
 
 
 
