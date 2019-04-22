@@ -66,4 +66,7 @@ https://doc.phpspider.org/configs-members.html
  (暂时使用宝塔面板的计划任务功能)
  
 ## 邮件功能
-在.env文件中保存有邮件的账号密码 
+在.env文件中保存有邮件的账号密码
+
+## 打开维护页面
+在application\tabs.php中进行设置 

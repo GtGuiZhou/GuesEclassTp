@@ -13,7 +13,7 @@
 return [
     // 应用初始化
     'app_init'     => [
-        'app\\behavior\\Wh'
+//        'app\\behavior\\Wh' //如果需要显示维护页面，打开该中间件即可
     ],
     // 应用开始
     'app_begin'    => [
