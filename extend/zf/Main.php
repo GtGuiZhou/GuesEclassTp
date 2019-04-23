@@ -91,7 +91,7 @@ class Main
      */
     public function timetable($act){
         $page =  $this->page->timetable($act);
-        $page = iconv('gb2312','utf-8',$page);
+        $page = iconv('gbk','utf-8',$page);
         return $this->parser->timetable($page);
     }
 
@@ -107,7 +107,7 @@ class Main
         $page = $this->page->indexScore($act);
         $viewstate = $this->parser->viewstate($page);
         $page =  $this->page->scoreReport($act,$viewstate);
-        $page = iconv('gb2312','utf-8',$page);
+        $page = iconv('gbk','utf-8',$page);
         return $this->parser->scoreReport($page);
     }
 

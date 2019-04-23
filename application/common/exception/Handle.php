@@ -32,7 +32,7 @@ class Handle extends HandleBase
 
         RedisManager::incExceptionNumber();
 
-        if (config('APP_DEBUG'))
+        if (config('app_debug'))
             return parent::render($e);// 调试时，错误交给系统处理
 
         // 参数验证错误

@@ -57,11 +57,11 @@ __;
         $pattern = <<<p
 /<td align="Center".*?>(.*?)<\/td>/
 p;
-        preg_match_all($pattern,$page,$matchs);
+        preg_match_all($pattern,$page,$matches);
 
-        $matchs = array_filter($matchs[1],function ($val){return mb_strlen($val) > 20;});
+        $matches = array_filter($matches[1],function ($val){return mb_strlen($val) > 20;});
 
-        return $matchs;
+        return $matches;
     }
 
     /**

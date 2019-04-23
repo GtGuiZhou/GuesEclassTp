@@ -47,7 +47,9 @@ class WebPage
             'Cookie' => $cookie,
             'Referer' => "$host/xs_main.aspx?xh=$account"
         ];
-        return $this->client->get("xskbcx.aspx?xh=$account&gnmkdm=N121603", ['headers' => $headers])->getBody();
+        $res = $this->client->get("xskbcx.aspx?xh=$account&gnmkdm=N121603", ['headers' => $headers]);
+
+        return $res->getBody()->getContents();
     }
 
 
