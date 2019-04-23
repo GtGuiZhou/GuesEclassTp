@@ -21,10 +21,8 @@ class MySpider extends Command
     {foreach $list as $v } 
         <tr >
             <td style="padding: 10px">{$v.title}</td>
-        </tr>
-        <tr >
             <td style="padding: 10px">
-                <a href="http://tieba.baidu.com{$v.url}">跳转</a>
+                <a href="http://tieba.baidu.com{$v.url}">跳转过去</a>
             </td>
         </tr>
         {/foreach}
