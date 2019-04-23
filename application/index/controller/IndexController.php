@@ -27,6 +27,9 @@ class IndexController extends Controller
             return redirect($iapp->forwardurl());
         }
 
+        // 浏览量+1
+        RedisManager::incViewNumber();
+
         $token = $info['visit_oauth']['access_token'];//轻应用获取的token
 
         Session::set('yb:token',$token);
