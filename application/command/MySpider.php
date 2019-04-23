@@ -20,7 +20,12 @@ class MySpider extends Command
     <table style="width: 600px" border="1" cellspacing="0" cellpadding="0">
     {foreach $list as $v } 
         <tr >
-            <td style="padding: 10px">{$v}</td>
+            <td style="padding: 10px">{$v.title}</td>
+        </tr>
+        <tr >
+            <td style="padding: 10px">
+                <a href="http://tieba.baidu.com{$v.url}">跳转</a>
+            </td>
         </tr>
         {/foreach}
     </table>
@@ -43,27 +48,22 @@ class MySpider extends Command
         // 监控php贴吧
         $res = requests::get('http://tieba.baidu.com/f?kw=php&fr=ala0&tpl=5&traceid=');
 
-        $pattern = '@<a rel="noreferrer" href=".*?" title=".*?" target="_blank" class=".*?">(.*?)<\/a>@';
+        $pattern = '@<a rel="noreferrer" href="(.*?)" title=".*?" target="_blank" class=".*?">(.*?)<\/a>@';
         preg_match_all($pattern,$res,$matches);
         $list = [];
 
-
-        if (count($matches) >= 2){
-
-            foreach ($matches[1] as $item){
-
+        if (count($matches) >= 3){
+            foreach ($matches[2] as $index => $item){
                 $key = 'myspider:tieba:php';
                 if (!$redis->sIsMember($key,$item)){
-                    var_dump($item);
                     $redis->sAdd($key,$item);
                     // 检测标题是否含有想要的信息
                     $p = ['求','接单','找人','急','有偿','商量'];
                     if ($this->check($item,$p))
-                        array_push($list,$item);
+                        array_push($list,['title' => $matches[2][$index],'url' => $matches[1][$index]]);
                 }
             }
         }
-
 
         // 发送邮件
     	if (count($list) > 0){
