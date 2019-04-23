@@ -1,0 +1,86 @@
+<?php
+
+namespace app\command;
+
+use app\common\model\EmailTaskModel;
+use app\common\task\SendEmail;
+use my\Email;
+use my\RedisPool;
+use phpspider\core\requests;
+use think\console\Command;
+use think\console\Input;
+use think\console\Output;
+use think\facade\View;
+
+class MySpider extends Command
+{
+
+    protected function html() {
+        return '
+    <table style="width: 600px" border="1" cellspacing="0" cellpadding="0">
+    {foreach $list as $v } 
+        <tr >
+            <td style="padding: 10px">{$v}</td>
+        </tr>
+        {/foreach}
+    </table>
+    ';
+    }
+
+
+    protected function configure()
+    {
+        // 指令配置
+        $this->setName('app\command\myspider');
+        // 设置参数
+        
+    }
+
+    protected function execute(Input $input, Output $output)
+    {
+
+        $redis = RedisPool::instance();
+        // 监控php贴吧
+        $res = requests::get('http://tieba.baidu.com/f?kw=php&fr=ala0&tpl=5&traceid=');
+
+        $pattern = '@<a rel="noreferrer" href=".*?" title=".*?" target="_blank" class=".*?">(.*?)<\/a>@';
+        preg_match_all($pattern,$res,$matches);
+        $list = [];
+
+
+        if (count($matches) >= 2){
+
+            foreach ($matches[1] as $item){
+
+                $key = 'myspider:tieba:php';
+                if (!$redis->sIsMember($key,$item)){
+                    var_dump($item);
+                    $redis->sAdd($key,$item);
+                    // 检测标题是否含有想要的信息
+                    $p = ['求','接单','找人','急','有偿','商量'];
+                    if ($this->check($item,$p))
+                        array_push($list,$item);
+                }
+            }
+        }
+
+
+        // 发送邮件
+    	if (count($list) > 0){
+    	    var_dump($list);
+    	    echo '发送邮件';
+            $email = new Email('php贴吧监听',View::display($this->html(),['list'=>$list]),["735311619@qq.com"]);
+    	    EmailTaskModel::create($email->getConfig());
+        }
+    }
+
+
+    public function check($str,$arr){
+        foreach ($arr as $item){
+            if (strstr($str,$item))
+                return true;
+        }
+
+        return false;
+    }
+}

@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 return [
+    'my_spider' => 'app\command\MySpider',
     'timer' => 'app\command\timer\TimerObserver',
     'email_task' => 'app\command\EmailTaskTimer',
     'top_article_spider' => 'app\command\TopArticleSpider',
