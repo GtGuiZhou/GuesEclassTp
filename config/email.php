@@ -20,6 +20,7 @@ if (\think\facade\Env::get('APP_DEBUG',false))
         'to_video_audit' => ['735311619@qq.com'],
         'to_repair' => [ '735311619@qq.com'],
         'to_report_day' => [ '735311619@qq.com'],
+        'to_feedback' => ['735311619@qq.com']
     ];
 else
     return [
@@ -33,4 +34,5 @@ else
         'to_video_audit' => ['735311619@qq.com'],
         'to_repair' => ['2631790782@qq.com', '735311619@qq.com'],
         'to_report_day' => ['2631790782@qq.com', '735311619@qq.com'],
+        'to_feedback' => ['735311619@qq.com']
     ];
