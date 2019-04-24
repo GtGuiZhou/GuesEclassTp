@@ -13,3 +13,12 @@
 \think\facade\Route::rule('api/repair/add','api/repair/add')
     ->validate('app\common\validate\RepairValidate')
     ->middleware(\app\http\middleware\UserBind::class);
+
+\think\facade\Route::rule('api/repair/handled','api/repair/handled')
+    ->middleware(\app\http\middleware\UserBind::class);
+
+\think\facade\Route::rule('api/repair/close','api/repair/close')
+    ->middleware(\app\http\middleware\UserBind::class);
+
+\think\facade\Route::rule('api/repair/cnt','api/repair/cnt')
+    ->middleware(\app\http\middleware\UserBind::class);

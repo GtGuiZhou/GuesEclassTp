@@ -33,7 +33,7 @@
 <!--报修-->
 <table border="1" cellspacing="0" cellpadding="0">
     <tr>
-        <th colspan="5" style="padding: 10px">未处理报修列表</th>
+        <th colspan="7" style="padding: 10px">未处理报修列表</th>
     </tr>
     <tr>
         <th>创建时间</th>
@@ -41,6 +41,8 @@
         <th>报修地址</th>
         <th>电话</th>
         <th>维修状态</th>
+        <th>催促次数</th>
+        <th>催促时间</th>
     </tr>
     {volist name="repair_list" id="v"}
     <tr>
@@ -49,6 +51,8 @@
         <td style="padding: 5px">{$v.address}</td>
         <td style="padding: 5px">{$v.phone}</td>
         <td style="padding: 5px">{$v.state}</td>
+        <td style="padding: 5px">{$v.cnt}</td>
+        <td style="padding: 5px">{$v.update_time_text}</td>
     </tr>
     {/volist}
 </table>

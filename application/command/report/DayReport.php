@@ -38,8 +38,13 @@ class DayReport extends Command
             'top_article_list' => $topArticle,
             'view_number' => $view_number,
             'exception_number' => $exception_number,
-            'date_range' => $date_range
+            'date_range' => $date_range,
+            'is_top_article' => count(array_filter($topArticle->toArray(),function ($item){
+                return $item['school'] == '贵州工程应用技术学院';
+            })) > 0
         ]);
+
+
 
     	$email = new Email('日常报告',$html,config('email.to_report_day'));
         EmailTaskModel::create($email->getConfig());

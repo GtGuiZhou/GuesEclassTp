@@ -10,6 +10,8 @@ namespace app\api\controller;
 
 
 use app\common\controller\ApiBase;
+use app\common\exception\UnLoginException;
+use app\common\model\RepairModel;
 use app\common\model\UserModel;
 
 class UserController extends ApiBase
@@ -23,7 +25,15 @@ class UserController extends ApiBase
     }
 
     public function info(){
-        return success($this->user());
+        $user = null;
+        try{
+            $user = $this->user();
+            $repair = RepairModel::where('user_id' , $user['id'])
+                ->where('state' , '未处理')->find();
+            $user['repair'] = $repair;
+        } catch (UnLoginException $e) {
+        }
+        return success($user);
     }
 
     /**
