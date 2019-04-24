@@ -20,7 +20,7 @@ class CommentModel extends BaseModel
     protected static function init()
     {
         self::event('after_insert',function ($comment){
-            list($module,$id) = implode(':',$comment['module']);
+            list($module,$id) = explode(':',$comment['module']);
             if ($module == 'lovewall'){
                 VideoModel::where('id',$id)->setInc('comment_number');
             }

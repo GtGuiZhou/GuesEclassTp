@@ -10,6 +10,7 @@ use phpspider\core\requests;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
+use think\Exception;
 use think\facade\View;
 
 class MySpider extends Command
@@ -43,11 +44,20 @@ class MySpider extends Command
     {
 
         $redis = RedisPool::instance();
-        // 监控php贴吧
-        $res = requests::get('http://tieba.baidu.com/f?kw=php&fr=ala0&tpl=5&traceid=');
+        $kws = ['php','html','vue','thinkphp','laravel','javascript'];
+        $res = '';
+        foreach ($kws as $kw) {
+            try {
+                $res = $res . requests::get("http://tieba.baidu.com/f?kw=$kw&fr=ala0&tpl=5&traceid=");
+                sleep(1);
+            } catch (Exception $e) {
+                continue;
+            }
+        }
 
         $pattern = '@<a rel="noreferrer" href="(.*?)" title=".*?" target="_blank" class=".*?">(.*?)<\/a>@';
         preg_match_all($pattern,$res,$matches);
+
         $list = [];
 
         if (count($matches) >= 3){
