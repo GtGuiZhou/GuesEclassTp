@@ -11,6 +11,7 @@ namespace app\api\controller;
 
 use app\common\controller\ApiBase;
 use app\common\exception\UnLoginException;
+use app\common\model\MessageModel;
 use app\common\model\RepairModel;
 use app\common\model\UserModel;
 
@@ -28,9 +29,19 @@ class UserController extends ApiBase
         $user = null;
         try{
             $user = $this->user();
+            // 报修情况
             $repair = RepairModel::where('user_id' , $user['id'])
                 ->where('state' , '未处理')->find();
+            // 用户是否有系统消息
+            $message = MessageModel::where('user_id' , $user['id'])
+                ->where('is_read',0)
+                ->find();
+            if ($message) {
+                $message['is_read'] = 1;
+                $message->save();
+            }
             $user['repair'] = $repair;
+            $user['message'] = $message;
         } catch (UnLoginException $e) {
         }
         return success($user);
