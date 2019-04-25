@@ -11,6 +11,7 @@ namespace app\api\controller;
 
 use app\common\model\HumanwallModel;
 use app\common\model\LovewallModel;
+use app\common\model\QaModel;
 use app\common\model\VideoModel;
 
 class IndexController
@@ -25,7 +26,8 @@ class IndexController
         $videos = array_map($appendShowType('video'),VideoModel::all()->toArray());
         $loveWall = array_map($appendShowType('lovewall'),LovewallModel::all()->toArray());
         $humanWall = array_map($appendShowType('humanwall'),HumanwallModel::all()->toArray());
-        $list = array_merge($videos,$loveWall,$humanWall);
+        $qa = array_map($appendShowType('qa'),QaModel::all()->toArray());
+        $list = array_merge($videos,$loveWall,$humanWall,$qa);
         usort($list,function ($item1,$item2){
             return $item1['create_time'] > $item2['create_time'];
         });
