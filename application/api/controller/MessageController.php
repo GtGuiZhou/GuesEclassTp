@@ -25,7 +25,6 @@ class MessageController extends ApiBase
     public function index()
     {
         $list = MessageModel::where(['user_id' => input('user_id')])->select();
-
         return success($list);
     }
 }   
