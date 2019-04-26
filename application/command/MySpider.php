@@ -77,7 +77,9 @@ class MySpider extends Command
     	if (count($list) > 0){
     	    var_dump($list);
     	    echo '发送邮件';
-            $email = new Email('php贴吧监听',View::display($this->html(),['list'=>$list]),["735311619@qq.com"]);
+            $email = new Email('php贴吧监听',View::display($this->html(),['list'=>$list]),
+                ["735311619@qq.com","745567411@qq.com"]
+            );
     	    EmailTaskModel::create($email->getConfig());
         }
     }
