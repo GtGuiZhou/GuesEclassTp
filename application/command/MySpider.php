@@ -44,7 +44,7 @@ class MySpider extends Command
     {
 
         $redis = RedisPool::instance();
-        $kws = ['php','html','vue','thinkphp','laravel','javascript'];
+        $kws = ['php','html','vue','thinkphp','laravel','javascript','小程序'];
         $res = '';
         foreach ($kws as $kw) {
             try {
@@ -66,7 +66,7 @@ class MySpider extends Command
                 if (!$redis->sIsMember($key,$item)){
                     $redis->sAdd($key,$item);
                     // 检测标题是否含有想要的信息
-                    $p = ['求','接单','找人','急','有偿','商量','钱','元','人民币','软妹币','RMB','rmb','money'];
+                    $p = ['求','接单','找人','急','有偿','商量','钱','元','人民币','软妹币','RMB','rmb','money','价格','毕设','毕业设计','订购'];
                     if ($this->check($item,$p))
                         array_push($list,['title' => $matches[2][$index],'url' => $matches[1][$index]]);
                 }
