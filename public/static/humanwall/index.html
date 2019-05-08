@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
     <title>人人墙</title>
     <style>
         body {
@@ -18,7 +20,7 @@
         #danmuarea {
             position: relative;
             background: #222;
-            width:800px;
+            width:100%;
             height: 445px;
             margin-left: auto;
             margin-right: auto;
@@ -33,48 +35,73 @@
     </style>
 </head>
 <body>
-Demo<br><br>
 <!--黑背景和弹幕区-->
 <div id="danmuarea">
     <div id="danmu" >
     </div>
 </div>
 <!--控制区-->
-<div class="ctr" >
-    <button type="button"  onclick="resumer() ">弹幕开始/继续</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button type="button"  onclick="pauser()">弹幕暂停</button>  &nbsp;&nbsp;&nbsp;&nbsp;
-    显示弹幕:<input type='checkbox' checked='checked' id='ishide' value='is' onchange='changehide()'> &nbsp;&nbsp;&nbsp;&nbsp;
-    弹幕透明度:
-    <input type="range" name="op" id="op" onchange="op()" value="100"> <br>
-    当前弹幕运行时间(秒)：<span id="time"></span>&nbsp;&nbsp;
-    设置当前弹幕时间(秒)： <input type="text" id="set_time" max=20 />
-    <button type="button"  onclick="settime()">设置</button>
-    <br>
-    发弹幕:
-    <select  name="color" id="color" >
-        <option value="white">白色</option>
-        <option value="red">红色</option>
-        <option value="green">绿色</option>
-        <option value="blue">蓝色</option>
-        <option value="yellow">黄色</option>
-    </select>
-    <select name="size" id="text_size" >
-        <option value="1">大文字</option>
-        <option value="0">小文字</option>
-    </select>
-    <select name="position" id="position"   >
-        <option value="0">滚动</option>
-        <option value="1">顶端</option>
-        <option value="2">底端</option>
-    </select>
-    <input type="textarea" id="text" max=300 />
-    <button type="button"  onclick="send()">发送</button>
+<div id="app">
+    <div class="ctr" style="text-align: center;">
+        <button type="button"  onclick="resumer() ">弹幕开始/继续</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button"  onclick="pauser()">弹幕暂停</button>  &nbsp;&nbsp;&nbsp;&nbsp;
+        显示弹幕:<input type='checkbox' checked='checked' id='ishide' value='is' onchange='changehide()'> &nbsp;&nbsp;&nbsp;&nbsp;
+        弹幕透明度:
+        <input type="range" name="op" id="op" onchange="op()" value="100">&nbsp;&nbsp;
+        当前弹幕运行时间(秒)：<span id="time"></span>&nbsp;&nbsp;
+        设置当前弹幕时间(秒)： <input type="text" id="set_time" max=20 />
+        <button type="button"  onclick="settime()">设置</button>
+        <br>
+        人人墙ID:
+        <input id="humanwallId" value="2">
+        默认文字大小:
+        <input id="size" value="2">
+        发弹幕:
+        <select  name="color" id="color" >
+            <option value="white">白色</option>
+            <option value="red">红色</option>
+            <option value="green">绿色</option>
+            <option value="blue">蓝色</option>
+            <option value="yellow">黄色</option>
+        </select>
+        <select name="size" id="text_size" >
+            <option value="1">大文字</option>
+            <option value="0">小文字</option>
+        </select>
+        <select name="position" id="position"   >
+            <option value="0">滚动</option>
+            <option value="1">顶端</option>
+            <option value="2">底端</option>
+        </select>
+        <input type="textarea" id="text" max=300 />
+        <button type="button"  onclick="send()">发送</button>
+        <button type="button" onclick="FScreen()">全屏</button>
+    </div>
 </div>
 
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script src="./src/jquery.danmu.js"></script>
 
     <script>
+
+    	$(document).ready(function(){
+    		$('body').css({padding: 0, margin: 0, border: 0});
+    		$('#danmuarea').css("height", $( window ).height()-$('.ctr').height()-10+"px");
+    		$('.ctr').css({width: '100%'});
+    		
+    		$(document).keyup(function(event){
+				switch(event.keyCode) {
+					case 27: {
+						$('#danmuarea').css("height", $( window ).height()-$('.ctr').height()-10+"px");
+	    				$('.ctr').show();
+					}
+				}
+			});
+		});
+    	function FScreen(){
+    		$('.ctr').hide();
+    		$('#danmuarea').css("height", $( window ).height()+"px");
+    	}
         //初始化
         $("#danmu").danmu({
             left:0,
@@ -90,15 +117,18 @@ Demo<br><br>
 
         //从后端获取到弹幕并添加
         function query() {
-            $.get("/api/humanwall/commentList/id/2",function(data,status){
+            var id = $('#humanwallId').val()
+            var size = $('#size').val()
+            $.get("/api/humanwall/commentList/id/" + id,function(data,status){
                 var danmu_from_sql=eval(data);
                 danmu_from_sql = danmu_from_sql.data
+                console.log(danmu_from_sql.length)
                 for (var i=0;i<danmu_from_sql.length;i++){
                     var color = 'white'
                     var size = 1
                     var position = 0
-                    var time = $('#danmu').data("nowTime")+1;
-                    var text_obj = {"text": danmu_from_sql[i], "color": color, "size": size, "position": position, "time": time};
+                    var time = $('#danmu').data("nowTime")+ parseInt(5 * Math.random());
+                    var text_obj = {"text": danmu_from_sql[i].content, "color": color, "size": size, "position": position, "time": time};
                     console.log(text_obj)
                     $('#danmu').danmu("addDanmu",text_obj);
                 }

@@ -29,7 +29,7 @@ class IndexController
         $qa = array_map($appendShowType('qa'),QaModel::all()->toArray());
         $list = array_merge($videos,$loveWall,$humanWall,$qa);
         usort($list,function ($item1,$item2){
-            return $item1['create_time'] > $item2['create_time'];
+            return $item1['create_time'] < $item2['create_time'];
         });
         return success($list);
     }

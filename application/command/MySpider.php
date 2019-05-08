@@ -98,6 +98,6 @@ class MySpider extends Command
      * 回复帖子（pc有验证码保护,手机客户端没有）
      */
     public function reply(){
-        requests::post();
+
     }
 }
