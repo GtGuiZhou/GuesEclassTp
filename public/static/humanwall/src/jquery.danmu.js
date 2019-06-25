@@ -508,7 +508,7 @@ var cyntax = {
         danmuList: {},
         defaultFontColor: "#FFFFFF",
         fontSizeSmall: 16,
-        FontSizeBig: 24,
+        FontSizeBig: 60,
         opacity: "0.9",
         topBottomDanmuTime: 6000,
         SubtitleProtection: false,

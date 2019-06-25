@@ -29,4 +29,13 @@ class CommentController extends ApiBase
         return success($this->model->where('module',input('module'))->select());
     }
 
+    public function index(){
+        return success($this->model->where('module',input('module'))
+            ->order('id','desc')
+            ->page(input('index'))
+            ->select());
+    }
+
+
+
 }   

@@ -77,9 +77,11 @@ class Main
      * @return \Psr\Http\Message\StreamInterface
      */
     public function checkCode(){
+
         $res = $this->client->get('CheckCode.aspx');
         $cookie = $res->getHeaders()['Set-Cookie'][0];
         Session::set('zf:cookie',$cookie);
+
         return $res->getBody();
     }
 

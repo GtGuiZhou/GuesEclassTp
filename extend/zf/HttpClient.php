@@ -25,6 +25,7 @@ class HttpClient
     public static function instance(){
 
         $host = Config::get('zf.host',false);
+
         if (!$host)
             throw new ZFException('未在配置文件中设定正方教务系统的host地址');
         $timeout = Config::get('zf.timeout',5);

@@ -118,15 +118,14 @@
         //从后端获取到弹幕并添加
         function query() {
             var id = $('#humanwallId').val()
-            var size = $('#size').val()
             $.get("/api/humanwall/commentList/id/" + id,function(data,status){
                 var danmu_from_sql=eval(data);
                 danmu_from_sql = danmu_from_sql.data
                 console.log(danmu_from_sql.length)
                 for (var i=0;i<danmu_from_sql.length;i++){
                     var color = 'white'
-                    var size = 1
-                    var position = 0
+                    var position = parseInt(4 * Math.random())
+                    var size = $('#size').val()
                     var time = $('#danmu').data("nowTime")+ parseInt(5 * Math.random());
                     var text_obj = {"text": danmu_from_sql[i].content, "color": color, "size": size, "position": position, "time": time};
                     console.log(text_obj)
